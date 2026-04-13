@@ -124,3 +124,190 @@ O sistema utiliza **QR Codes individuais** para identificação, eliminando **10
 ---
 
 ## 🏗️ Arquitetura do Sistema
+
+┌─────────────┐ ┌──────────────────┐ ┌──────────────┐
+│ NAVEGADOR │────▶│ Google Apps │────▶│ Google │
+│ (Frontend) │◀────│ Script (Backend) │◀────│ Sheets (BD) │
+└─────────────┘ └──────────────────┘ └──────────────┘
+│
+├──▶ Gmail (e-mails)
+├──▶ QR Server (QR Codes)
+└──▶ WhatsApp (comprovantes)
+
+
+---
+
+## 📁 Estrutura de Arquivos
+
+📁 sistema-lanchonete-angelus/
+├── 📄 README.md
+├── 📄 LICENSE
+├── 📁 src/
+│ ├── 📄 Code.gs # Backend completo
+│ ├── 📄 index.html # Registro de consumo
+│ ├── 📄 painel.html # Painel diário (RH)
+│ ├── 📄 relatorio.html # Relatório + extrato (RH)
+│ └── 📄 qrcodes.html # Gerador de QR Codes
+└── 📁 docs/
+├── 📄 ESTRUTURA-PLANILHA.md
+└── 📄 CHECKLIST.md
+
+
+---
+
+## 🚀 Como Instalar
+
+### Pré-requisitos
+- Conta Google (Gmail)
+- Acesso ao Google Sheets e Google Apps Script
+
+### Passo 1: Criar a Planilha
+
+1. Acesse [Google Sheets](https://sheets.google.com)
+2. Crie: **"Sistema Angelus - Lanchonete"**
+3. Aba **`Funcionarios`**: Matricula | Nome | Setor | Email | Telefone
+4. Aba **`Registros`**: Data/Hora | Matricula | Nome | Setor | Valor | Protocolo | Status
+
+> 📖 Veja detalhes em [docs/ESTRUTURA-PLANILHA.md](docs/ESTRUTURA-PLANILHA.md)
+
+### Passo 2: Criar o Apps Script
+
+1. Na planilha → **Extensões → Apps Script**
+2. Crie os 5 arquivos copiando da pasta `src/`
+3. Salve todos
+
+### Passo 3: Autorizar e Publicar
+
+1. Selecione `doGet` → **▶ Executar** → Autorize permissões
+2. **Implantar → Nova implantação → App da Web**
+3. Executar como: Eu | Acesso: Qualquer pessoa
+4. Copie a URL gerada
+
+### Passo 4: Atualizar Links de Navegação
+
+Nos arquivos HTML, substitua os links de navegação pela sua URL.
+
+> 📖 Veja o checklist completo em [docs/CHECKLIST.md](docs/CHECKLIST.md)
+
+---
+
+## 📖 Como Usar
+
+### 🍔 Atendente da Lanchonete
+
+Escaneie o QR Code do funcionário
+Verifique o nome na tela
+Digite o valor consumido
+Clique em "Registrar Consumo"
+Envie comprovante por WhatsApp (opcional)
+
+
+### 📊 Setor de RH
+
+
+Painel Diário → sua-url/exec?page=painel
+Acompanhe consumos em tempo real
+
+Relatório Mensal → sua-url/exec?page=relatorio
+Selecione mês/ano → Gere → Imprima ou envie por e-mail
+
+Extrato Individual → mesma página, aba "Extrato Individual"
+Digite matrícula → Busque → Envie ao funcionário
+
+
+---
+
+## 🗄️ Estrutura da Planilha
+
+### Aba: Funcionarios
+| Matricula | Nome | Setor | Email | Telefone |
+|-----------|------|-------|-------|----------|
+| 1001 | Maria Silva | Enfermagem | maria@hospital.com | 83988024149 |
+
+### Aba: Registros
+| Data/Hora | Matricula | Nome | Setor | Valor | Protocolo | Status |
+|-----------|-----------|------|-------|-------|-----------|--------|
+| *(automático)* | | | | | | |
+
+---
+
+## 🔄 Fluxo de Funcionamento
+
+FUNCIONÁRIO → Apresenta QR Code
+↓
+ATENDENTE → Escaneia com celular/tablet
+↓
+SISTEMA → Identifica automaticamente
+↓
+1ª VEZ? → SIM → Autocadastro (setor, e-mail, WhatsApp)
+↓
+ATENDENTE → Digita apenas o valor
+↓
+SISTEMA → Registra na planilha
+→ Envia comprovante por e-mail
+→ Gera link WhatsApp
+→ Gera protocolo único
+↓
+FINAL DO MÊS → RH gera relatório em 1 clique
+→ Imprime para desconto em folha
+→ Envia extrato individual se solicitado
+
+
+---
+
+## 🔧 Solução de Problemas
+
+| Problema | Solução |
+|----------|---------|
+| Matrícula não encontrada | Verifique aba Funcionarios |
+| E-mail não chega | Limite ~100/dia na conta gratuita |
+| QR Code não abre | Use "Gerenciar implantações" ao atualizar |
+| Página em branco | Reexecute a autorização |
+| "is not a function" | Reimplante com "Nova versão" |
+
+---
+
+## 🤝 Contribuindo
+
+1. Faça um **Fork** do projeto
+2. Crie uma **branch** (`git checkout -b feature/NovaFeature`)
+3. **Commit** suas mudanças (`git commit -m 'Adiciona feature'`)
+4. **Push** (`git push origin feature/NovaFeature`)
+5. Abra um **Pull Request**
+
+### 💡 Ideias para contribuições futuras
+- [ ] Limite diário de gastos por funcionário
+- [ ] Dashboard com gráficos (Chart.js)
+- [ ] Notificação automática ao atingir limite
+- [ ] Cardápio digital integrado
+- [ ] Múltiplas lanchonetes
+- [ ] App nativo (Android/iOS)
+- [ ] Integração com sistema de ponto
+
+---
+
+## 📝 Licença
+
+Este projeto está sob a licença **MIT**. Veja o arquivo [LICENSE](LICENSE) para detalhes.
+
+---
+
+## 👨‍💻 Autor
+
+<div align="center">
+
+### 🐸 Blue Frog Technology
+
+Desenvolvido como solução real para controle de consumo em lanchonete hospitalar.
+
+⭐ **Se este projeto te ajudou, deixe uma estrela!**
+
+---
+
+*Feito com ❤️ para hospitais e empresas*
+
+</div>
+
+
+
+
