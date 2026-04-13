@@ -1,0 +1,357 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+
+    body {
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:#f0f2f5; min-height:100vh; padding:15px;
+    }
+
+    /* TOPO */
+    .topo {
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:#fff; padding:20px 25px; border-radius:16px;
+      max-width:1000px; margin:0 auto 20px;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    }
+    .topo h1 { font-size:20px; }
+    .topo p { font-size:13px; opacity:.9; }
+    .topo .nav a {
+      color:#fff; text-decoration:none; background:rgba(255,255,255,.2);
+      padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+      margin-left:8px; transition:background .3s;
+    }
+    .topo .nav a:hover { background:rgba(255,255,255,.35); }
+
+    /* CONTAINER */
+    .container {
+      max-width:1000px; margin:0 auto;
+    }
+
+    /* FILTROS */
+    .filtros {
+      background:#fff; border-radius:14px; padding:20px;
+      box-shadow:0 2px 10px rgba(0,0,0,.08);
+      display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
+      margin-bottom:20px;
+    }
+    .filtros .campo { flex:1; min-width:140px; }
+    .filtros label {
+      display:block; font-size:11px; font-weight:700; color:#555;
+      text-transform:uppercase; margin-bottom:4px; letter-spacing:.5px;
+    }
+    .filtros input[type="date"] {
+      width:100%; padding:10px 12px; border:2px solid #e0e0e0;
+      border-radius:10px; font-size:14px; outline:none;
+    }
+    .filtros input:focus { border-color:#667eea; }
+
+    .btn {
+      padding:11px 22px; border:none; border-radius:10px;
+      font-size:14px; font-weight:700; cursor:pointer; transition:all .3s;
+      white-space:nowrap;
+    }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
+    .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(102,126,234,.4); }
+    .btn-refresh { background:linear-gradient(135deg,#ff9800,#f57c00); color:#fff; }
+    .btn-refresh:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(255,152,0,.4); }
+
+    /* MENSAGEM */
+    .msg {
+      padding:12px 16px; border-radius:10px; margin-bottom:18px;
+      font-size:14px; font-weight:500; text-align:center; display:none;
+    }
+    .msg.erro  { display:block; background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
+    .msg.ok    { display:block; background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
+    .msg.info  { display:block; background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+
+    /* CARDS RESUMO */
+    .resumo {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(200px,1fr));
+      gap:15px; margin-bottom:20px;
+    }
+    .card-resumo {
+      background:#fff; border-radius:14px; padding:20px;
+      text-align:center; box-shadow:0 2px 10px rgba(0,0,0,.08);
+    }
+    .card-resumo .num { font-size:30px; font-weight:bold; }
+    .card-resumo .lbl { font-size:12px; color:#888; margin-top:4px; }
+    .card-blue .num { color:#1565c0; }
+    .card-green .num { color:#2e7d32; }
+    .card-orange .num { color:#e65100; }
+
+    /* TABELA */
+    .tabela-box {
+      background:#fff; border-radius:14px; padding:20px;
+      box-shadow:0 2px 10px rgba(0,0,0,.08); overflow-x:auto;
+    }
+    .tabela-box h3 { color:#333; font-size:16px; margin-bottom:15px; }
+
+    table { width:100%; border-collapse:collapse; }
+    thead tr { background:#667eea; color:#fff; }
+    th { padding:11px 10px; text-align:left; font-size:12px; font-weight:700; text-transform:uppercase; }
+    td { padding:10px; font-size:13px; border-bottom:1px solid #f0f0f0; }
+    tr:nth-child(even) { background:#fafafa; }
+    tr:hover { background:#f0f4ff; }
+
+    .badge-valor {
+      background:#e8f5e9; color:#2e7d32; padding:4px 10px;
+      border-radius:20px; font-weight:700; font-size:12px;
+    }
+    .badge-hora {
+      background:#e3f2fd; color:#1565c0; padding:3px 8px;
+      border-radius:6px; font-size:11px; font-weight:600;
+    }
+
+    .sem-dados {
+      text-align:center; padding:40px; color:#aaa; font-size:16px;
+    }
+
+    /* LOADING */
+    .loading {
+      display:inline-block; width:16px; height:16px;
+      border:3px solid rgba(255,255,255,.3); border-radius:50%;
+      border-top-color:#fff; animation:spin .8s linear infinite;
+      vertical-align:middle; margin-right:6px;
+    }
+    .loading-dark {
+      border:3px solid rgba(0,0,0,.1); border-top-color:#667eea;
+    }
+
+    @keyframes spin { to{transform:rotate(360deg);} }
+
+    /* ATUALIZAÇÃO AUTOMÁTICA */
+    .auto-refresh {
+      display:flex; align-items:center; gap:8px;
+      font-size:12px; color:#888;
+    }
+    .auto-refresh .dot {
+      width:8px; height:8px; background:#4caf50; border-radius:50%;
+      animation:pulse 2s infinite;
+    }
+    @keyframes pulse {
+      0%,100% { opacity:1; }
+      50% { opacity:.4; }
+    }
+
+    @media print {
+      .topo, .filtros, .btn { display:none!important; }
+      .tabela-box { box-shadow:none; padding:0; }
+      body { background:#fff; }
+    }
+
+    @media (max-width:600px) {
+      .topo { flex-direction:column; text-align:center; }
+      .filtros { flex-direction:column; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPO -->
+<div class="topo">
+  <div>
+    <h1>📊 Painel de Acompanhamento Diário</h1>
+    <p>Lanchonete Angelus - Controle do RH</p>
+  </div>
+  <div class="nav">
+    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=relatorio" target="_top">📋 Relatório Mensal</a>
+    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=qrcodes" target="_top">📱 QR Codes</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- MENSAGEM -->
+  <div id="msg" class="msg"></div>
+
+  <!-- FILTROS -->
+  <div class="filtros">
+    <div class="campo">
+      <label>📅 Data Início</label>
+      <input type="date" id="dataInicio">
+    </div>
+    <div class="campo">
+      <label>📅 Data Fim</label>
+      <input type="date" id="dataFim">
+    </div>
+    <div>
+      <button class="btn btn-primary" id="btnBuscar" onclick="buscarConsumos()">
+        🔍 Buscar
+      </button>
+    </div>
+    <div>
+      <button class="btn btn-refresh" onclick="buscarHoje()">
+        📌 Hoje
+      </button>
+    </div>
+    <div class="auto-refresh">
+      <span class="dot"></span>
+      <span id="ultimaAtualizacao">-</span>
+    </div>
+  </div>
+
+  <!-- RESUMO -->
+  <div class="resumo" id="resumoCards" style="display:none;">
+    <div class="card-resumo card-blue">
+      <div class="num" id="totalRegistros">0</div>
+      <div class="lbl">Registros</div>
+    </div>
+    <div class="card-resumo card-orange">
+      <div class="num" id="totalFunc">0</div>
+      <div class="lbl">Funcionários</div>
+    </div>
+    <div class="card-resumo card-green">
+      <div class="num" id="totalValor">R$ 0,00</div>
+      <div class="lbl">Valor Total</div>
+    </div>
+  </div>
+
+  <!-- TABELA -->
+  <div class="tabela-box">
+    <h3 id="tabelaTitulo">📋 Consumos do Dia</h3>
+    <table>
+      <thead>
+        <tr>
+          <th>#</th>
+          <th>Data</th>
+          <th>Hora</th>
+          <th>Matrícula</th>
+          <th>Nome</th>
+          <th>Setor</th>
+          <th>Valor</th>
+          <th>Protocolo</th>
+        </tr>
+      </thead>
+      <tbody id="tabelaBody">
+        <tr><td colspan="8" class="sem-dados">Clique em "Hoje" ou selecione um período para visualizar os consumos.</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+</div>
+
+<script>
+  // Define datas padrão (hoje)
+  window.onload = function() {
+    var hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('dataInicio').value = hoje;
+    document.getElementById('dataFim').value = hoje;
+    buscarConsumos();
+
+    // Auto-refresh a cada 60 segundos
+    setInterval(function() { buscarConsumos(true); }, 60000);
+  };
+
+  function buscarHoje() {
+    var hoje = new Date().toISOString().split('T')[0];
+    document.getElementById('dataInicio').value = hoje;
+    document.getElementById('dataFim').value = hoje;
+    buscarConsumos();
+  }
+
+  function buscarConsumos(silencioso) {
+    var di = document.getElementById('dataInicio').value;
+    var df = document.getElementById('dataFim').value;
+
+    if (!di || !df) {
+      if (!silencioso) mostrarMsg('Selecione as datas.', 'erro');
+      return;
+    }
+
+    var btn = document.getElementById('btnBuscar');
+    if (!silencioso) {
+      btn.disabled = true;
+      btn.innerHTML = '<span class="loading"></span> Buscando...';
+      esconderMsg();
+    }
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        btn.disabled = false;
+        btn.innerHTML = '🔍 Buscar';
+
+        if (r.sucesso) {
+          exibirResultados(r, di, df);
+          document.getElementById('ultimaAtualizacao').textContent =
+            'Atualizado: ' + new Date().toLocaleTimeString('pt-BR');
+        } else {
+          if (!silencioso) mostrarMsg('❌ ' + (r.mensagem || 'Erro ao buscar dados'), 'erro');
+        }
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = '🔍 Buscar';
+        if (!silencioso) mostrarMsg('❌ ' + (r.mensagem || 'Erro ao buscar dados'), 'erro');
+      })
+      .buscarConsumosPorData(di, df);
+  }
+
+  function exibirResultados(r, di, df) {
+    // Cards
+    document.getElementById('resumoCards').style.display = 'grid';
+    document.getElementById('totalRegistros').textContent = r.totalRegistros;
+    document.getElementById('totalValor').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
+
+    // Conta funcionários únicos
+    var unicos = {};
+    for (var i = 0; i < r.registros.length; i++) {
+      unicos[r.registros[i].matricula] = true;
+    }
+    document.getElementById('totalFunc').textContent = Object.keys(unicos).length;
+
+    // Título
+    if (di === df) {
+      document.getElementById('tabelaTitulo').textContent = '📋 Consumos de ' + formatarData(di);
+    } else {
+      document.getElementById('tabelaTitulo').textContent = '📋 Consumos de ' + formatarData(di) + ' a ' + formatarData(df);
+    }
+
+    // Tabela
+    var tbody = document.getElementById('tabelaBody');
+
+    if (r.registros.length === 0) {
+      tbody.innerHTML = '<tr><td colspan="8" class="sem-dados">😴 Nenhum consumo registrado neste período.</td></tr>';
+      return;
+    }
+
+    var html = '';
+    for (var i = 0; i < r.registros.length; i++) {
+      var reg = r.registros[i];
+      html += '<tr>'
+        + '<td>' + (i + 1) + '</td>'
+        + '<td>' + reg.data + '</td>'
+        + '<td><span class="badge-hora">' + reg.hora + '</span></td>'
+        + '<td>' + reg.matricula + '</td>'
+        + '<td><strong>' + reg.nome + '</strong></td>'
+        + '<td>' + reg.setor + '</td>'
+        + '<td><span class="badge-valor">' + reg.valorFmt + '</span></td>'
+        + '<td style="font-size:11px;color:#aaa;">' + reg.protocolo + '</td>'
+        + '</tr>';
+    }
+    tbody.innerHTML = html;
+  }
+
+  function formatarData(d) {
+    var p = d.split('-');
+    return p[2] + '/' + p[1] + '/' + p[0];
+  }
+
+  function mostrarMsg(t, tipo) {
+    var el = document.getElementById('msg');
+    el.className = 'msg ' + tipo;
+    el.textContent = t;
+  }
+  function esconderMsg() {
+    var el = document.getElementById('msg');
+    el.className = 'msg';
+    el.textContent = '';
+  }
+</script>
+
+</body>
+</html>
