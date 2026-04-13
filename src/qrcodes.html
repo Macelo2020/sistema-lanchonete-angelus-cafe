@@ -1,0 +1,324 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: #f5f5f5;
+      padding: 20px;
+    }
+    .header-page {
+      text-align: center;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      padding: 25px;
+      border-radius: 16px;
+      margin-bottom: 25px;
+      max-width: 900px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    .header-page h1 { font-size: 22px; margin-bottom: 5px; }
+    .header-page p { opacity: 0.9; font-size: 14px; }
+    .nav-links {
+      text-align: center;
+      margin-bottom: 15px;
+    }
+    .nav-links a {
+      display: inline-block;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      text-decoration: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      font-size: 13px;
+      font-weight: 600;
+      margin: 0 5px;
+      transition: all .3s;
+    }
+    .nav-links a:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 15px rgba(102,126,234,.4);
+    }
+    .acoes {
+      text-align: center;
+      margin-bottom: 15px;
+      display: flex;
+      justify-content: center;
+      gap: 12px;
+      flex-wrap: wrap;
+    }
+    .btn-acao {
+      color: #fff;
+      border: none;
+      padding: 14px 30px;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s;
+    }
+    .btn-acao:hover {
+      transform: translateY(-2px);
+    }
+    .btn-imprimir {
+      background: linear-gradient(135deg, #43a047, #66bb6a);
+    }
+    .btn-imprimir:hover { box-shadow: 0 5px 20px rgba(67,160,71,.4); }
+
+    /* BUSCA INDIVIDUAL */
+    .busca-box {
+      max-width: 900px;
+      margin: 0 auto 25px;
+      background: #fff;
+      border-radius: 14px;
+      padding: 20px;
+      box-shadow: 0 2px 10px rgba(0,0,0,.08);
+      display: flex;
+      gap: 12px;
+      align-items: flex-end;
+      flex-wrap: wrap;
+    }
+    .busca-box .campo { flex: 1; min-width: 200px; }
+    .busca-box label {
+      display: block; font-size: 11px; font-weight: 700;
+      color: #555; text-transform: uppercase; margin-bottom: 4px;
+    }
+    .busca-box input, .busca-box select {
+      width: 100%; padding: 10px 12px; border: 2px solid #e0e0e0;
+      border-radius: 10px; font-size: 14px; outline: none;
+    }
+    .busca-box input:focus, .busca-box select:focus { border-color: #667eea; }
+    .btn-buscar {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff; border: none; padding: 10px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: all .3s;
+    }
+    .btn-buscar:hover { transform: translateY(-2px); box-shadow: 0 5px 15px rgba(102,126,234,.4); }
+    .btn-limpar {
+      background: linear-gradient(135deg, #ff9800, #f57c00);
+      color: #fff; border: none; padding: 10px 22px; border-radius: 10px;
+      font-size: 14px; font-weight: 700; cursor: pointer; transition: all .3s;
+    }
+    .btn-limpar:hover { transform: translateY(-2px); }
+
+    .loading-page {
+      text-align: center;
+      padding: 60px;
+      color: #888;
+      font-size: 18px;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+      gap: 20px;
+      max-width: 900px;
+      margin: 0 auto;
+    }
+    .cartao {
+      background: #fff;
+      border: 2px solid #e0e0e0;
+      border-radius: 16px;
+      padding: 25px 20px;
+      text-align: center;
+      page-break-inside: avoid;
+      break-inside: avoid;
+      position: relative;
+    }
+    .cartao .logo { font-size: 30px; margin-bottom: 8px; }
+    .cartao .titulo {
+      font-size: 12px; color: #764ba2; font-weight: 700;
+      text-transform: uppercase; letter-spacing: 1px;
+    }
+    .cartao .qr-img {
+      margin: 15px 0;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 200px;
+    }
+    .cartao .qr-img img {
+      width: 200px;
+      height: 200px;
+      border: 2px solid #f0f0f0;
+      border-radius: 8px;
+    }
+    .cartao .nome { font-size: 16px; font-weight: 700; color: #333; margin-bottom: 3px; }
+    .cartao .info { font-size: 13px; color: #888; }
+    .cartao .mat { font-size: 12px; color: #aaa; margin-top: 5px; }
+    .cartao hr { border: none; border-top: 1px dashed #ddd; margin: 12px 0; }
+    .cartao .rodape { font-size: 10px; color: #bbb; }
+
+    /* BOTÃO IMPRIMIR INDIVIDUAL */
+    .btn-individual {
+      margin-top: 10px;
+      background: linear-gradient(135deg, #1976d2, #42a5f5);
+      color: #fff;
+      border: none;
+      padding: 8px 18px;
+      border-radius: 8px;
+      font-size: 12px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all .3s;
+    }
+    .btn-individual:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 3px 10px rgba(25,118,210,.4);
+    }
+
+    @media print {
+      body { background: #fff; padding: 0; }
+      .header-page, .acoes, .nav-links, .busca-box, .btn-individual { display: none !important; }
+      .grid { gap: 10px; }
+      .cartao { border: 1px solid #ccc; padding: 15px; }
+      .cartao.esconder-print { display: none !important; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="header-page">
+    <h1>📱 Gerador de QR Codes - Lanchonete Angelus</h1>
+    <p>Gere e imprima os QR Codes individuais de cada funcionário</p>
+  </div>
+
+  <div class="nav-links">
+    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=painel" target="_top">📊 Painel Diário</a>
+    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=relatorio" target="_top">📋 Relatório</a>
+  </div>
+
+  <!-- BUSCA / FILTRO -->
+  <div class="busca-box">
+    <div class="campo">
+      <label>🔍 Buscar por Nome ou Matrícula</label>
+      <input type="text" id="campoBusca" placeholder="Digite nome ou matrícula..." oninput="filtrarCartoes()">
+    </div>
+    <div>
+      <button class="btn-limpar" onclick="limparBusca()">✖ Limpar</button>
+    </div>
+  </div>
+
+  <div class="acoes">
+    <button class="btn-acao btn-imprimir" onclick="imprimirTodos()">🖨️ Imprimir Todos os QR Codes</button>
+  </div>
+
+  <div id="loading" class="loading-page">⏳ Carregando funcionários...</div>
+  <div id="grid" class="grid"></div>
+
+<script>
+  var todosCartoes = [];
+
+  document.addEventListener('DOMContentLoaded', function() {
+    google.script.run
+      .withSuccessHandler(function(baseUrl) {
+        google.script.run
+          .withSuccessHandler(function(lista) {
+            document.getElementById('loading').style.display = 'none';
+            var grid = document.getElementById('grid');
+
+            if (!lista || lista.length === 0) {
+              grid.innerHTML = '<p style="text-align:center;color:#888;grid-column:1/-1;">Nenhum funcionário encontrado.</p>';
+              return;
+            }
+
+            todosCartoes = lista;
+            renderizarCartoes(lista, baseUrl);
+          })
+          .withFailureHandler(function(err) {
+            document.getElementById('loading').innerHTML = '❌ Erro: ' + err.message;
+          })
+          .buscarTodosFuncionarios();
+      })
+      .withFailureHandler(function(err) {
+        document.getElementById('loading').innerHTML = '❌ Erro URL: ' + err.message;
+      })
+      .getWebAppUrl();
+  });
+
+  function renderizarCartoes(lista, baseUrl) {
+    var grid = document.getElementById('grid');
+    var html = '';
+
+    for (var i = 0; i < lista.length; i++) {
+      var f = lista[i];
+      var qrData = baseUrl + '?m=' + encodeURIComponent(f.matricula);
+      var qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(qrData);
+
+      html += ''
+        + '<div class="cartao" id="cartao-' + f.matricula + '" '
+        + 'data-nome="' + f.nome.toLowerCase() + '" '
+        + 'data-mat="' + f.matricula + '">'
+        + '  <div class="logo">🍔</div>'
+        + '  <div class="titulo">Lanchonete Angelus</div>'
+        + '  <div class="qr-img">'
+        + '    <img src="' + qrImgUrl + '" alt="QR ' + f.nome + '">'
+        + '  </div>'
+        + '  <div class="nome">' + f.nome + '</div>'
+        + '  <div class="info">🏥 ' + f.setor + '</div>'
+        + '  <div class="mat">Matrícula: ' + f.matricula + '</div>'
+        + '  <hr>'
+        + '  <div class="rodape">Apresente este QR Code na lanchonete</div>'
+        + '  <button class="btn-individual" onclick="imprimirIndividual(\'' + f.matricula + '\')">🖨️ Imprimir este QR Code</button>'
+        + '</div>';
+    }
+
+    grid.innerHTML = html;
+  }
+
+  // FILTRAR CARTÕES
+  function filtrarCartoes() {
+    var busca = document.getElementById('campoBusca').value.toLowerCase().trim();
+    var cartoes = document.querySelectorAll('.cartao');
+
+    cartoes.forEach(function(cartao) {
+      var nome = cartao.getAttribute('data-nome');
+      var mat = cartao.getAttribute('data-mat');
+
+      if (busca === '' || nome.indexOf(busca) > -1 || mat.indexOf(busca) > -1) {
+        cartao.style.display = 'block';
+      } else {
+        cartao.style.display = 'none';
+      }
+    });
+  }
+
+  // LIMPAR BUSCA
+  function limparBusca() {
+    document.getElementById('campoBusca').value = '';
+    filtrarCartoes();
+  }
+
+  // IMPRIMIR TODOS
+  function imprimirTodos() {
+    var cartoes = document.querySelectorAll('.cartao');
+    cartoes.forEach(function(c) { c.classList.remove('esconder-print'); });
+    window.print();
+  }
+
+  // IMPRIMIR INDIVIDUAL
+  function imprimirIndividual(matricula) {
+    var cartoes = document.querySelectorAll('.cartao');
+
+    // Esconde todos exceto o selecionado
+    cartoes.forEach(function(c) {
+      if (c.getAttribute('data-mat') === matricula) {
+        c.classList.remove('esconder-print');
+      } else {
+        c.classList.add('esconder-print');
+      }
+    });
+
+    window.print();
+
+    // Depois de imprimir, mostra todos novamente
+    setTimeout(function() {
+      cartoes.forEach(function(c) { c.classList.remove('esconder-print'); });
+    }, 1000);
+  }
+</script>
+
+</body>
+</html>
