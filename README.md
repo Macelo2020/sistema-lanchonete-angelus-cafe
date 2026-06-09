@@ -254,3 +254,13 @@ Ideias para contribuições futuras:
 - [ ] Integração com sistema de folha de pagamento.
 
 ---
+
+## 👨‍💻 Autor
+
+<div align="center">
+
+### 🐸 Blue Frog Technology
+
+⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
+
+</div>
