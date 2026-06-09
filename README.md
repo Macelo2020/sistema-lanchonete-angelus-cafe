@@ -1,6 +1,6 @@
 <div align="center">
 
-# 🍔 Sistema de Controle de Consumo - Lanchonete Angelus
+# 🍔 Sistema de Controle de Consumo - Lanchonete Angelus Café
 
 ### Solução completa e blindada com QR Code para controle de consumo de funcionários em lanchonetes hospitalares
 
@@ -25,7 +25,7 @@
 ## 📋 Índice
 
 - [Sobre o Projeto](#-sobre-o-projeto)
-- [Visual do Sistema](#-visual-do-sistema)
+- [Galeria Visual do Sistema](#-galeria-visual-do-sistema)
 - [Problema Resolvido](#-problema-resolvido)
 - [Funcionalidades](#-funcionalidades)
 - [Blindagens da Versão Premium](#-blindagens-da-versão-premium)
@@ -47,26 +47,6 @@ O sistema utiliza **QR Codes individuais** para identificação, eliminando **10
 
 ---
 
-## 📱 Visual do Sistema
-
-<div align="center">
-
-| 📲 Tela de Registro de Consumo (Balcão) | 📊 Painel Diário em Tempo Real (RH) |
-|---|---|
-| *<-- ADICIONE AQUI O PRINT DO `index.html` -->* | *<-- ADICIONE AQUI O PRINT DO `painel.html` -->* |
-| **Atendente bipa e insere o valor.** | **RH acompanha faturamento ao vivo.** |
-
-| 📄 Relatório Mensal em Linha (RH) | 🔲 Gerador de QR Codes (RH) |
-|---|---|
-| *<-- ADICIONE AQUI O PRINT DO `relatorio.html` -->* | *<-- ADICIONE AQUI O PRINT DO `qrcodes.html` -->* |
-| **Pronto para impressão em 1 clique.** | **Geração em lote para crachás.** |
-
-> 💡 *Dica: Tire capturas de tela das suas 4 páginas do sistema e substitua os placeholders acima pelos links das imagens para uma divulgação perfeita.*
-
-</div>
-
----
-
 ## 🎯 Problema Resolvido
 
 | ❌ Antes (Google Forms Manual) | ✅ Depois (Sistema Angelus Premium) |
@@ -74,7 +54,7 @@ O sistema utiliza **QR Codes individuais** para identificação, eliminando **10
 | Funcionário digitava o nome/matrícula errado | Dados automáticos via QR Code individual |
 | RH perdia horas corrigindo faturamento desalinhado | Blindagem de colunas: dados sempre alinhados |
 | Sem comprovante imediato para o funcionário | Comprovante instantâneo via e-mail e WhatsApp |
-| Relatório manual demorado ao final do mês | Relatório automático e em linha em 1 clique |
+| Relatório manual demorado ao final do mês | Relatório automático e em linha em 14 clique |
 | Sem controle em tempo real | Painel diário com atualização automática |
 
 ---
@@ -117,9 +97,8 @@ Esta versão (**v3.8 Premium**) foi desenvolvida para ser resiliente a erros hum
 2.  **WhatsApp Premium:** O link do WhatsApp é gerado no frontend do navegador (`index.html`) usando os dados do faturamento atual. Isso impede faturamentos fantasmas e resolve erros `404` que ocorriam na API do servidor.
 
 ---
----
 
-## 📸 Galeria Visual do Sistema Lanchonete Angelus
+## 📸 Galeria Visual do Sistema
 
 O sistema Blue Frog Technology foi desenvolvido com foco total na Experiência do Usuário (UX/UI), apresentando uma interface limpa, corporativa e totalmente responsiva. Abaixo, apresentamos a jornada visual das principais telas.
 
@@ -131,7 +110,7 @@ Desenvolvemos o "Flow Mobile-First" para que os funcionários do hospital consig
 
 | 🔄 Autocadastro de Primeira Compra | 🔲 Geração do QR Code de Autorização |
 |---|---|
-| <img src="docs/assets/image_25.png" width="300px" alt="Tela de Autocadastro Móvel"> | <img src="https://api.qrserver.com/v1/create-qr-code/?size=300x300&data=docs/assets/image_33.png" width="300px" alt="QR Code Autorização"> |
+| <img src="docs/ASSETS/image_25.png" width="300px" alt="Tela de Autocadastro Móvel"> | <img src="docs/ASSETS/image_33.png" width="300px" alt="QR Code Autorização"> |
 | **UX Premium:** Se for o primeiro acesso, o sistema detecta dados ausentes e abre automaticamente a tela amarela para o colaborador preencher Setor, E-mail e WhatsApp, salvando instantaneamente nas colunas blindadas. | **Blindagem de Dados:** Após o cadastro, o funcionário recebe este QR Code estático. Ao escanear, o atendente abre uma tela exclusiva de balcão já "logada" no faturamento desse colaborador, impedindo erros 404 e desalinhamentos de faturamento. |
 
 </div>
@@ -146,7 +125,7 @@ A interface de balcão foi desenhada para a máxima velocidade. O atendente não
 
 | 🔍 Bipando e Buscando Matrícula | ✅ Colaborador Identificado |
 |---|---|
-| <img src="docs/assets/image_33.png" width="300px" alt="Tela de Busca de Matrícula"> | <img src="docs/assets/image_31.png" width="300px" alt="Colaborador Identificado"> |
+| <img src="docs/ASSETS/image_33.png" width="300px" alt="Tela de Busca de Matrícula"> | <img src="docs/ASSETS/image_31.png" width="300px" alt="Colaborador Identificado"> |
 | **Segurança Ativa:** A tela aguarda a leitura. Se a matrícula for inválida, uma mensagem de erro é exibida. Se válida, o sistema passa para a próxima etapa sem looping. | **Faturamento Blindado:** Nome, Matrícula e Setor são preenchidos automaticamente. O atendente digita apenas o valor e clica em **✅ Registrar Consumo**. |
 
 </div>
@@ -159,25 +138,25 @@ Redesenhamos toda a experiência administrativa para que o RH tenha acompanhamen
 
 #### 🏢 Relatório Mensal Geral (v3.8 Premium Horizontal)
 
-<img src="docs/assets/image_28.png" width="800px" alt="Visual Horizontal Premium Relatório Mensal">
+<img src="docs/ASSETS/image_28.png" width="800px" alt="Visual Horizontal Premium Relatório Mensal">
 
 > **Inovação de UX:** Alinhamos os filtros (Mês, Ano) na horizontal para aproveitar melhor o espaço da tela corporativa. O RH seleciona o período e clica em **📊 Gerar Relatório** para ver o consolidado de todos os funcionários em linha, pronto para impressão em 1 clique.
 
 #### 👤 Extrato Individual (Sincronização Dupla)
 
-<img src="docs/assets/image_29.png" width="800px" alt="Interface Extrato Individual">
+<img src="docs/ASSETS/image_29.png" width="800px" alt="Interface Extrato Individual">
 
 > **Segurança:** O RH pode buscar o extrato digitando a matrícula **ou** selecionando o nome na lista lateral. Os dois campos se sincronizam automaticamente, garantindo que o relatório seja sempre do funcionário correto.
 
 #### 📈 Painel Diário em Tempo Real
 
-<img src="docs/assets/image_30.png" width="800px" alt="Painel Diário em Tempo Real v1.0">
+<img src="docs/ASSETS/image_30.png" width="800px" alt="Painel Diário em Tempo Real v1.0">
 
 > **Visibilidade:** O painel diário se atualiza automaticamente a cada 60 segundos, exibindo os consumos do dia com Data, Hora, Nome e o Protocolo Único irrepetível. O RH tem o controle total do faturamento em tempo real.
 
 #### 🔲 Geração e Impressão de QR Codes
 
-<img src="docs/assets/image_26.png" width="800px" alt="Gerador de QR Codes">
+<img src="docs/ASSETS/image_26.png" width="800px" alt="Gerador de QR Codes">
 
 > **Produção:** O RH pode gerar QR Codes para todos os funcionários ativos ou buscar um individualmente. O layout é formatado como cartão corporativo para impressão e inserção em crachás.
 
@@ -248,7 +227,7 @@ O sistema depende da estrutura exata das abas e colunas para funcionar.
 | **Matrícula** | **Nome** | **Setor** | **Email** | **Telefone** |
 | 1001 | Maria Silva | Enfermagem | maria@hospital.com | 83988024149 |
 
-*   *Os campos Setor, Email e Telefone podem ser preenchidos manualmente pelo RH ou serão preenchidos pelo autocadastro do funcionário na lanchonete.*
+* *Os campos Setor, Email e Telefone podem ser preenchidos manualmente pelo RH ou serão preenchidos pelo autocadastro do funcionário na lanchonete.*
 
 ### Aba: `Registros` (Histórico de Consumo)
 | Coluna A (1) | Coluna B (2) | Coluna C (3) | Coluna D (4) | Coluna E (5) | Coluna F (6) | Coluna G (7) |
@@ -275,13 +254,3 @@ Ideias para contribuições futuras:
 - [ ] Integração com sistema de folha de pagamento.
 
 ---
-
-## 👨‍💻 Autor
-
-<div align="center">
-
-### 🐸 Blue Frog Technology
-
-⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
-
-</div>
