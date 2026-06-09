@@ -1,0 +1,620 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
+      background:#f0f2f5; min-height:100vh; padding:15px;
+    }
+    .topo {
+      background:linear-gradient(135deg,#667eea,#764ba2);
+      color:#fff; padding:20px 25px; border-radius:16px;
+      max-width:1000px; margin:0 auto 20px;
+      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+    }
+    .topo h1 { font-size:20px; }
+    .topo p { font-size:13px; opacity:.9; }
+    .topo .nav a {
+      color:#fff; text-decoration:none; background:rgba(255,255,255,.2);
+      padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
+      margin-left:8px; transition:background .3s;
+    }
+    .topo .nav a:hover { background:rgba(255,255,255,.35); }
+    .container { max-width:1000px; margin:0 auto; }
+    .abas {
+      display:flex; gap:0; margin-bottom:20px;
+      background:#fff; border-radius:14px; overflow:hidden;
+      box-shadow:0 2px 10px rgba(0,0,0,.08);
+    }
+    .aba {
+      flex:1; padding:14px; text-align:center; cursor:pointer;
+      font-size:14px; font-weight:700; color:#888; transition:all .3s;
+      border-bottom:3px solid transparent;
+    }
+    .aba:hover { background:#f5f5f5; }
+    .aba.ativa { color:#667eea; border-bottom-color:#667eea; background:#f8f9ff; }
+    .painel { display:none; }
+    .painel.visivel { display:block; }
+    .card-box {
+      background:#fff; border-radius:14px; padding:25px;
+      box-shadow:0 2px 10px rgba(0,0,0,.08); margin-bottom:20px;
+    }
+    .card-box h3 { color:#333; font-size:16px; margin-bottom:18px; }
+    .filtros {
+      display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
+      margin-bottom:18px;
+    }
+    .filtros .campo { flex:1; min-width:120px; }
+    .filtros label {
+      display:block; font-size:11px; font-weight:700; color:#555;
+      text-transform:uppercase; margin-bottom:4px;
+    }
+    .filtros select, .filtros input {
+      width:100%; padding:10px 12px; border:2px solid #e0e0e0;
+      border-radius:10px; font-size:14px; outline:none;
+    }
+    .filtros select:focus, .filtros input:focus { border-color:#667eea; }
+    .btn {
+      padding:11px 22px; border:none; border-radius:10px;
+      font-size:13px; font-weight:700; cursor:pointer; transition:all .3s;
+      white-space:nowrap; display:inline-block; text-align:center;
+    }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
+    .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(102,126,234,.4); }
+    .btn-green { background:linear-gradient(135deg,#43a047,#66bb6a); color:#fff; }
+    .btn-green:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(67,160,71,.4); }
+    .btn-dark { background:linear-gradient(135deg,#444,#777); color:#fff; }
+    .btn-dark:hover:not(:disabled) { transform:translateY(-2px); }
+    .btn-email { background:linear-gradient(135deg,#1976d2,#42a5f5); color:#fff; }
+    .btn-email:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(25,118,210,.4); }
+    .btn-wpp { background:linear-gradient(135deg,#25d366,#128c7e); color:#fff; text-decoration:none; }
+    .btn-wpp:hover { transform:translateY(-2px); }
+    .btns-group { display:flex; gap:10px; flex-wrap:wrap; margin-top:15px; }
+    .msg {
+      padding:12px 16px; border-radius:10px; margin-bottom:18px;
+      font-size:14px; font-weight:500; text-align:center; display:none;
+    }
+    .msg.erro { display:block; background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
+    .msg.ok { display:block; background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
+    .msg.info { display:block; background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+    .resumo {
+      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
+      gap:12px; margin-bottom:20px;
+    }
+    .card-stat { padding:18px; border-radius:12px; text-align:center; }
+    .card-stat .num { font-size:26px; font-weight:bold; }
+    .card-stat .lbl { font-size:11px; color:#666; margin-top:3px; }
+    .bg-blue { background:#e3f2fd; }
+    .bg-blue .num { color:#1565c0; }
+    .bg-green { background:#e8f5e9; }
+    .bg-green .num { color:#2e7d32; }
+    .bg-orange { background:#fff3e0; }
+    .bg-orange .num { color:#e65100; }
+    .tabela-wrap { overflow-x:auto; }
+    table { width:100%; border-collapse:collapse; }
+    thead tr { background:#667eea; color:#fff; }
+    th { padding:11px 10px; text-align:left; font-size:12px; font-weight:700; text-transform:uppercase; }
+    td { padding:10px; font-size:13px; border-bottom:1px solid #f0f0f0; }
+    tr:nth-child(even) { background:#fafafa; }
+    tr:hover { background:#f0f4ff; }
+    tfoot tr { background:#667eea; color:#fff; font-weight:700; }
+    tfoot td { padding:12px 10px; border:none; font-size:13px; }
+    .ficha {
+      background:#f8faf8; border:2px solid #c8e6c9;
+      border-radius:14px; padding:20px; margin:15px 0; display:none;
+    }
+    .ficha.visivel { display:block; }
+    .ficha h4 { color:#2e7d32; margin-bottom:12px; font-size:15px; }
+    .ficha .info-row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:12px; }
+    .ficha .info-item { font-size:13px; }
+    .ficha .info-item strong { color:#333; }
+    .ficha .total-big {
+      font-size:28px; font-weight:bold; color:#2e7d32;
+      text-align:center; margin:15px 0;
+    }
+    .loading {
+      display:inline-block; width:16px; height:16px;
+      border:3px solid rgba(255,255,255,.3); border-radius:50%;
+      border-top-color:#fff; animation:spin .8s linear infinite;
+      vertical-align:middle; margin-right:6px;
+    }
+    @keyframes spin { to{transform:rotate(360deg);} }
+    @media print {
+      body { background:#fff !important; padding:0 !important; }
+      .topo, .abas, .filtros, .btns-group, .btn, .nav { display:none !important; }
+      .container { max-width:100%; }
+      .card-box { box-shadow:none; border:1px solid #ddd; padding:15px; }
+      .print-header { display:block !important; text-align:center; margin-bottom:20px; padding-bottom:15px; border-bottom:2px solid #333; }
+      .print-header h2 { font-size:20px; color:#333; }
+      .print-header p { font-size:12px; color:#666; margin-top:4px; }
+      table { font-size:11px; }
+      th { background:#333 !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+      tfoot tr { background:#333 !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
+    }
+    .print-header { display:none; }
+    @media (max-width:600px) {
+      .topo { flex-direction:column; text-align:center; }
+      .filtros { flex-direction:column; }
+      .ficha .info-row { flex-direction:column; gap:5px; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- TOPO -->
+<div class="topo">
+  <div>
+    <h1>📋 Relatório & Extrato - Lanchonete Angelus</h1>
+    <p>Relatório mensal para impressão e extrato individual</p>
+  </div>
+  <div class="nav">
+    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=painel" target="_top">📊 Painel Diário</a>
+    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=qrcodes" target="_top">📱 QR Codes</a>
+  </div>
+</div>
+
+<div class="container">
+
+  <!-- ABAS -->
+  <div class="abas" id="abas">
+    <div class="aba ativa" data-aba="geral">📊 Relatório Mensal</div>
+    <div class="aba" data-aba="individual">👤 Extrato Individual</div>
+  </div>
+
+  <!-- MENSAGEM -->
+  <div id="msg" class="msg"></div>
+
+  <!-- ============================== -->
+  <!-- ABA 1: RELATÓRIO MENSAL        -->
+  <!-- ============================== -->
+  <div id="painelGeral" class="painel visivel">
+
+    <div class="print-header" id="printHeaderGeral">
+      <h2>🍔 Lanchonete Angelus - Relatório Mensal</h2>
+      <p id="printPeriodoGeral"></p>
+    </div>
+
+    <div class="card-box">
+      <h3>📅 Selecione o Período</h3>
+      <div class="filtros">
+        <div class="campo">
+          <label>Mês</label>
+          <select id="selMes">
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Ano</label>
+          <select id="selAno"></select>
+        </div>
+        <div class="campo">
+          <label>E-mail do RH (opcional)</label>
+          <input type="email" id="emailRH" placeholder="rh@hospital.com">
+        </div>
+        <div>
+          <button class="btn btn-primary" id="btnGerar">📊 Gerar Relatório</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTADO -->
+    <div id="resultadoGeral" style="display:none;">
+      <div class="resumo">
+        <div class="card-stat bg-blue">
+          <div class="num" id="totalFunc">0</div>
+          <div class="lbl">Funcionários</div>
+        </div>
+        <div class="card-stat bg-orange">
+          <div class="num" id="totalCompras">0</div>
+          <div class="lbl">Total de Compras</div>
+        </div>
+        <div class="card-stat bg-green">
+          <div class="num" id="totalGeral">R$ 0,00</div>
+          <div class="lbl">Valor Total</div>
+        </div>
+      </div>
+
+      <div class="card-box">
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Matrícula</th>
+                <th>Nome</th>
+                <th>Setor</th>
+                <th>Qtd</th>
+                <th>Total</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaBody"></tbody>
+            <tfoot id="tabelaFoot"></tfoot>
+          </table>
+        </div>
+
+        <div class="btns-group">
+          <button class="btn btn-green" id="btnEnviarRH">📧 Enviar Relatório por E-mail ao RH</button>
+          <button class="btn btn-dark" onclick="window.print()">🖨️ Imprimir Relatório</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============================== -->
+  <!-- ABA 2: EXTRATO INDIVIDUAL      -->
+  <!-- ============================== -->
+  <div id="painelIndividual" class="painel">
+
+    <div class="print-header" id="printHeaderInd">
+      <h2>🍔 Lanchonete Angelus - Extrato Individual</h2>
+      <p id="printPeriodoInd"></p>
+    </div>
+
+    <div class="card-box">
+      <h3>👤 Buscar Extrato do Funcionário</h3>
+      <div class="filtros">
+        <div class="campo">
+          <label>Matrícula</label>
+          <input type="text" id="matIndividual" placeholder="Ex: 1001" inputmode="numeric">
+        </div>
+        <div class="campo">
+          <label>Mês</label>
+          <select id="selMesInd">
+            <option value="1">Janeiro</option>
+            <option value="2">Fevereiro</option>
+            <option value="3">Março</option>
+            <option value="4">Abril</option>
+            <option value="5">Maio</option>
+            <option value="6">Junho</option>
+            <option value="7">Julho</option>
+            <option value="8">Agosto</option>
+            <option value="9">Setembro</option>
+            <option value="10">Outubro</option>
+            <option value="11">Novembro</option>
+            <option value="12">Dezembro</option>
+          </select>
+        </div>
+        <div class="campo">
+          <label>Ano</label>
+          <select id="selAnoInd"></select>
+        </div>
+        <div>
+          <button class="btn btn-primary" id="btnBuscarInd">🔍 Buscar Extrato</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- FICHA DO FUNCIONÁRIO -->
+    <div id="fichaInd" class="ficha">
+      <h4 id="fichaTitle">📋 Extrato do Funcionário</h4>
+      <div class="info-row">
+        <div class="info-item"><strong>Nome:</strong> <span id="fichaNome"></span></div>
+        <div class="info-item"><strong>Matrícula:</strong> <span id="fichaMat"></span></div>
+        <div class="info-item"><strong>Setor:</strong> <span id="fichaSetor"></span></div>
+      </div>
+      <div class="total-big" id="fichaTotal">R$ 0,00</div>
+
+      <div class="card-box" style="margin-top:10px;">
+        <div class="tabela-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>#</th>
+                <th>Data</th>
+                <th>Hora</th>
+                <th>Valor</th>
+                <th>Protocolo</th>
+              </tr>
+            </thead>
+            <tbody id="tabelaIndBody"></tbody>
+          </table>
+        </div>
+      </div>
+
+      <div class="btns-group">
+        <button class="btn btn-email" id="btnEnviarExtrato">📧 Enviar Extrato por E-mail</button>
+        <a class="btn btn-wpp" id="btnWppExtrato" href="#" target="_blank">📱 Enviar por WhatsApp</a>
+        <button class="btn btn-dark" onclick="window.print()">🖨️ Imprimir Extrato</button>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+
+  // ====== PREENCHE ANOS ======
+  var anoAtual = new Date().getFullYear();
+  var mesAtual = new Date().getMonth() + 1;
+  var selAno = document.getElementById('selAno');
+  var selAnoInd = document.getElementById('selAnoInd');
+
+  for (var a = anoAtual; a >= anoAtual - 3; a--) {
+    var opt1 = document.createElement('option');
+    opt1.value = a; opt1.textContent = a;
+    selAno.appendChild(opt1);
+    var opt2 = document.createElement('option');
+    opt2.value = a; opt2.textContent = a;
+    selAnoInd.appendChild(opt2);
+  }
+
+  document.getElementById('selMes').value = mesAtual;
+  document.getElementById('selMesInd').value = mesAtual;
+
+  // ====== ABAS ======
+  var abas = document.querySelectorAll('#abas .aba');
+  abas.forEach(function(aba) {
+    aba.addEventListener('click', function() {
+      abas.forEach(function(a) { a.classList.remove('ativa'); });
+      aba.classList.add('ativa');
+
+      var tipo = aba.getAttribute('data-aba');
+      document.getElementById('painelGeral').classList.remove('visivel');
+      document.getElementById('painelIndividual').classList.remove('visivel');
+      esconderMsg();
+
+      if (tipo === 'geral') {
+        document.getElementById('painelGeral').classList.add('visivel');
+      } else {
+        document.getElementById('painelIndividual').classList.add('visivel');
+      }
+    });
+  });
+
+  // ====== BOTÃO GERAR RELATÓRIO ======
+  document.getElementById('btnGerar').addEventListener('click', function() {
+    var mes = document.getElementById('selMes').value;
+    var ano = document.getElementById('selAno').value;
+    var btn = this;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> Gerando...';
+    esconderMsg();
+    document.getElementById('resultadoGeral').style.display = 'none';
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        btn.disabled = false;
+        btn.innerHTML = '📊 Gerar Relatório';
+
+        if (r.sucesso) {
+          exibirRelatorio(r);
+        } else {
+          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao gerar'), 'erro');
+        }
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = '📊 Gerar Relatório';
+        mostrarMsg('❌ Erro: ' + err.message, 'erro');
+      })
+      .gerarRelatorioMensal(mes, ano);
+  });
+
+  // ====== BOTÃO ENVIAR RELATÓRIO POR E-MAIL ======
+  document.getElementById('btnEnviarRH').addEventListener('click', function() {
+    var email = document.getElementById('emailRH').value.trim();
+    if (!email || email.indexOf('@') === -1) {
+      mostrarMsg('Preencha o e-mail do RH no campo acima.', 'erro');
+      return;
+    }
+    var mes = document.getElementById('selMes').value;
+    var ano = document.getElementById('selAno').value;
+    var btn = this;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> Enviando...';
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        btn.disabled = false;
+        btn.innerHTML = '📧 Enviar Relatório por E-mail ao RH';
+        if (r.sucesso) {
+          mostrarMsg('🎉 ' + r.mensagem, 'ok');
+        } else {
+          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao enviar'), 'erro');
+        }
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = '📧 Enviar Relatório por E-mail ao RH';
+        mostrarMsg('❌ Erro: ' + err.message, 'erro');
+      })
+      .enviarRelatorioParaRH(mes, ano, email);
+  });
+
+  // ====== BOTÃO BUSCAR EXTRATO INDIVIDUAL ======
+  document.getElementById('btnBuscarInd').addEventListener('click', function() {
+    var mat = document.getElementById('matIndividual').value.trim();
+    var mes = document.getElementById('selMesInd').value;
+    var ano = document.getElementById('selAnoInd').value;
+
+    if (!mat) { mostrarMsg('Digite a matrícula.', 'erro'); return; }
+
+    var btn = this;
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> Buscando...';
+    esconderMsg();
+    document.getElementById('fichaInd').classList.remove('visivel');
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        btn.disabled = false;
+        btn.innerHTML = '🔍 Buscar Extrato';
+
+        if (r.sucesso) {
+          exibirExtrato(r);
+        } else {
+          mostrarMsg('❌ ' + (r.mensagem || 'Não encontrado'), 'erro');
+        }
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = '🔍 Buscar Extrato';
+        mostrarMsg('❌ Erro: ' + err.message, 'erro');
+      })
+      .buscarConsumoIndividual(mat, mes, ano);
+  });
+
+  // ====== BOTÃO ENVIAR EXTRATO POR E-MAIL ======
+  document.getElementById('btnEnviarExtrato').addEventListener('click', function() {
+    var mat = document.getElementById('matIndividual').value.trim();
+    var mes = document.getElementById('selMesInd').value;
+    var ano = document.getElementById('selAnoInd').value;
+    var btn = this;
+
+    btn.disabled = true;
+    btn.innerHTML = '<span class="loading"></span> Enviando...';
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        btn.disabled = false;
+        btn.innerHTML = '📧 Enviar Extrato por E-mail';
+        if (r.sucesso) {
+          mostrarMsg('🎉 ' + r.mensagem, 'ok');
+        } else {
+          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao enviar'), 'erro');
+        }
+      })
+      .withFailureHandler(function(err) {
+        btn.disabled = false;
+        btn.innerHTML = '📧 Enviar Extrato por E-mail';
+        mostrarMsg('❌ Erro: ' + err.message, 'erro');
+      })
+      .enviarExtratoIndividual(mat, mes, ano);
+  });
+
+  // ====== BOTÃO WHATSAPP EXTRATO ======
+  document.getElementById('btnWppExtrato').addEventListener('click', function(e) {
+    var mat = document.getElementById('matIndividual').value.trim();
+    var mes = document.getElementById('selMesInd').value;
+    var ano = document.getElementById('selAnoInd').value;
+
+    e.preventDefault();
+
+    google.script.run
+      .withSuccessHandler(function(r) {
+        if (r.sucesso && r.link) {
+          window.open(r.link, '_blank');
+        } else {
+          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao gerar link'), 'erro');
+        }
+      })
+      .withFailureHandler(function(err) {
+        mostrarMsg('❌ Erro: ' + err.message, 'erro');
+      })
+      .gerarLinkWhatsappExtrato(mat, mes, ano);
+  });
+
+});
+
+// ====== EXIBIR RELATÓRIO MENSAL ======
+function exibirRelatorio(r) {
+  var meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+               'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  document.getElementById('printPeriodoGeral').textContent = meses[parseInt(r.mes)] + ' / ' + r.ano;
+  document.getElementById('totalFunc').textContent = r.totalFuncionarios;
+  document.getElementById('totalGeral').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
+
+  var totalCompras = 0;
+  for (var i = 0; i < r.dados.length; i++) { totalCompras += r.dados[i].qtd; }
+  document.getElementById('totalCompras').textContent = totalCompras;
+
+  var tbody = document.getElementById('tabelaBody');
+  var html = '';
+
+  if (r.dados.length === 0) {
+    html = '<tr><td colspan="6" style="text-align:center;color:#888;padding:30px;">Nenhum registro encontrado.</td></tr>';
+  } else {
+    for (var i = 0; i < r.dados.length; i++) {
+      var f = r.dados[i];
+      html += '<tr>'
+        + '<td>' + (i + 1) + '</td>'
+        + '<td>' + f.matricula + '</td>'
+        + '<td><strong>' + f.nome + '</strong></td>'
+        + '<td>' + f.setor + '</td>'
+        + '<td style="text-align:center;">' + f.qtd + '</td>'
+        + '<td style="text-align:right;font-weight:bold;">R$ ' + f.total.toFixed(2).replace('.', ',') + '</td>'
+        + '</tr>';
+    }
+  }
+  tbody.innerHTML = html;
+
+  var tfoot = document.getElementById('tabelaFoot');
+  tfoot.innerHTML = '<tr>'
+    + '<td colspan="4" style="text-align:left;">TOTAL GERAL</td>'
+    + '<td style="text-align:center;">' + totalCompras + '</td>'
+    + '<td style="text-align:right;">R$ ' + r.totalGeral.toFixed(2).replace('.', ',') + '</td>'
+    + '</tr>';
+
+  document.getElementById('resultadoGeral').style.display = 'block';
+  mostrarMsg('✅ Relatório gerado com ' + r.totalFuncionarios + ' funcionário(s).', 'ok');
+}
+
+// ====== EXIBIR EXTRATO INDIVIDUAL ======
+function exibirExtrato(r) {
+  var meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho',
+               'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+
+  var func = r.funcionario;
+  document.getElementById('fichaNome').textContent = func.nome;
+  document.getElementById('fichaMat').textContent = func.matricula;
+  document.getElementById('fichaSetor').textContent = func.setor;
+  document.getElementById('fichaTotal').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
+  document.getElementById('fichaTitle').textContent = '📋 Extrato de ' + func.nome + ' - ' + meses[parseInt(r.mes)] + '/' + r.ano;
+  document.getElementById('printPeriodoInd').textContent = func.nome + ' - ' + meses[parseInt(r.mes)] + '/' + r.ano;
+
+  var tbody = document.getElementById('tabelaIndBody');
+  var html = '';
+
+  if (r.registros.length === 0) {
+    html = '<tr><td colspan="5" style="text-align:center;color:#888;padding:20px;">Nenhum consumo neste período.</td></tr>';
+  } else {
+    for (var i = 0; i < r.registros.length; i++) {
+      var reg = r.registros[i];
+      html += '<tr>'
+        + '<td>' + (i + 1) + '</td>'
+        + '<td>' + reg.data + '</td>'
+        + '<td>' + reg.hora + '</td>'
+        + '<td style="font-weight:bold;">' + reg.valorFmt + '</td>'
+        + '<td style="font-size:11px;color:#aaa;">' + reg.protocolo + '</td>'
+        + '</tr>';
+    }
+  }
+  tbody.innerHTML = html;
+
+  document.getElementById('fichaInd').classList.add('visivel');
+  mostrarMsg('✅ Extrato encontrado: ' + r.totalRegistros + ' registro(s).', 'ok');
+}
+
+// ====== AUXILIARES ======
+function mostrarMsg(t, tipo) {
+  var el = document.getElementById('msg');
+  el.className = 'msg ' + tipo;
+  el.textContent = t;
+}
+function esconderMsg() {
+  var el = document.getElementById('msg');
+  el.className = 'msg';
+  el.textContent = '';
+}
+</script>
+
+</body>
+</html>

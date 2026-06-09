@@ -1,0 +1,418 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <base target="_top">
+  <style>
+    * { margin:0; padding:0; box-sizing:border-box; }
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 15px;
+    }
+    .container {
+      background: #fff;
+      border-radius: 20px;
+      padding: 35px 25px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+    }
+    .header { text-align:center; margin-bottom:25px; }
+    .header .icon { font-size:48px; }
+    .header h1 { color:#333; font-size:20px; margin-top:8px; }
+    .header p { color:#999; font-size:13px; margin-top:4px; }
+    .msg {
+      padding:12px 16px; border-radius:10px; margin-bottom:18px;
+      font-size:14px; font-weight:500; text-align:center; display:none;
+    }
+    .msg.erro  { display:block; background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
+    .msg.ok    { display:block; background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
+    .msg.info  { display:block; background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
+    .msg.aviso { display:block; background:#fff3e0; color:#e65100; border:1px solid #ffcc80; }
+    .form-group { margin-bottom:18px; }
+    .form-group label {
+      display:block; color:#555; font-size:12px; font-weight:700;
+      margin-bottom:5px; text-transform:uppercase; letter-spacing:.5px;
+    }
+    .form-group input, .form-group select {
+      width:100%; padding:13px 15px; border:2px solid #e0e0e0;
+      border-radius:12px; font-size:16px; outline:none; transition:border-color .3s;
+    }
+    .form-group input:focus, .form-group select:focus { border-color:#667eea; }
+    .form-group input[readonly] {
+      background:#f0f4f0; color:#333; font-weight:600;
+      cursor:default; border-color:#c8e6c9;
+    }
+    .form-group .hint {
+      font-size:11px; color:#999; margin-top:3px;
+    }
+    .valor-wrap { position:relative; }
+    .valor-wrap .rs {
+      position:absolute; left:15px; top:50%; transform:translateY(-50%);
+      color:#888; font-weight:700; font-size:16px;
+    }
+    .valor-wrap input { padding-left:42px; }
+    .btn {
+      width:100%; padding:14px; border:none; border-radius:12px;
+      font-size:15px; font-weight:700; cursor:pointer;
+      transition:all .3s; text-transform:uppercase; letter-spacing:.8px;
+      display:block; text-align:center; text-decoration:none;
+    }
+    .btn:disabled { opacity:.5; cursor:not-allowed; }
+    .btn-buscar { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; margin-bottom:10px; }
+    .btn-buscar:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 20px rgba(102,126,234,.4); }
+    .btn-registrar { background:linear-gradient(135deg,#43a047,#66bb6a); color:#fff; }
+    .btn-registrar:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 20px rgba(67,160,71,.4); }
+    .btn-salvar { background:linear-gradient(135deg,#ff9800,#f57c00); color:#fff; margin-bottom:10px; }
+    .btn-salvar:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 20px rgba(255,152,0,.4); }
+    .btn-wpp { background:linear-gradient(135deg,#25d366,#128c7e); color:#fff; margin-top:10px; display:none; }
+    .btn-wpp:hover { transform:translateY(-2px); box-shadow:0 5px 20px rgba(37,211,102,.4); }
+    .btn-novo { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; margin-top:12px; }
+    .dados-box {
+      display:none; background:#f8faf8; border:2px solid #c8e6c9;
+      border-radius:14px; padding:20px; margin-top:15px;
+    }
+    .dados-box.visivel { display:block; animation:slide .3s ease; }
+    .dados-box h3 {
+      color:#2e7d32; font-size:13px; margin-bottom:15px;
+      text-transform:uppercase; letter-spacing:.5px;
+    }
+    /* CADASTRO BOX */
+    .cadastro-box {
+      display:none; background:#fff8e1; border:2px solid #ffcc80;
+      border-radius:14px; padding:20px; margin-top:15px;
+    }
+    .cadastro-box.visivel { display:block; animation:slide .3s ease; }
+    .cadastro-box h3 {
+      color:#e65100; font-size:13px; margin-bottom:15px;
+      text-transform:uppercase; letter-spacing:.5px;
+    }
+    .sucesso-box {
+      display:none; text-align:center; padding:25px;
+      background:#f1f8e9; border:2px solid #aed581;
+      border-radius:14px; margin-top:15px;
+    }
+    .sucesso-box.visivel { display:block; animation:slide .3s ease; }
+    .sucesso-box .check { font-size:50px; }
+    .sucesso-box h3 { color:#2e7d32; margin:10px 0 5px; font-size:16px; }
+    .sucesso-box .valor-big { font-size:28px; font-weight:bold; color:#333; margin:5px 0; }
+    .sucesso-box .proto { color:#aaa; font-size:11px; margin-top:10px; }
+    .sucesso-box .email-info { font-size:12px; color:#888; margin-top:8px; }
+    .loading {
+      display:inline-block; width:18px; height:18px;
+      border:3px solid rgba(255,255,255,.3); border-radius:50%;
+      border-top-color:#fff; animation:spin .8s linear infinite;
+      vertical-align:middle; margin-right:6px;
+    }
+    @keyframes spin { to { transform:rotate(360deg); } }
+    @keyframes slide {
+      from { opacity:0; transform:translateY(-10px); }
+      to { opacity:1; transform:translateY(0); }
+    }
+  </style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="icon">🍔</div>
+    <h1>Lanchonete Angelus</h1>
+    <p>Registro de Consumo via QR Code</p>
+  </div>
+  <div id="msg" class="msg"></div>
+
+  <!-- ETAPA 1: MATRÍCULA -->
+  <div id="etapaMatricula">
+    <div class="form-group">
+      <label>📋 Matrícula do Funcionário</label>
+      <input type="text" id="inputMatricula" placeholder="Escaneie o QR Code ou digite" inputmode="numeric" autocomplete="off">
+    </div>
+    <button class="btn btn-buscar" id="btnBuscar">🔍 Buscar Funcionário</button>
+  </div>
+
+  <!-- ETAPA CADASTRO: Completar dados na 1ª compra -->
+  <div id="cadastroBox" class="cadastro-box">
+    <h3>⚠️ Complete seu cadastro (apenas 1ª vez)</h3>
+    <div class="form-group">
+      <label>👤 Nome</label>
+      <input type="text" id="cadNome" readonly>
+    </div>
+    <div class="form-group">
+      <label>🏥 Setor</label>
+      <input type="text" id="cadSetor" placeholder="Ex: Enfermagem, Recepção, TI...">
+    </div>
+    <div class="form-group">
+      <label>📧 E-mail</label>
+      <input type="email" id="cadEmail" placeholder="seu.email@hospital.com">
+      <div class="hint">Para receber comprovantes de consumo</div>
+    </div>
+    <div class="form-group">
+      <label>📱 WhatsApp (com DDD)</label>
+      <input type="text" id="cadTelefone" placeholder="Ex: 83988024149" inputmode="numeric">
+      <div class="hint">Para receber comprovantes por WhatsApp</div>
+    </div>
+    <button class="btn btn-salvar" id="btnSalvarCadastro">💾 Salvar e Continuar</button>
+  </div>
+
+  <!-- ETAPA 2: DADOS + VALOR -->
+  <div id="dadosBox" class="dados-box">
+    <h3>✅ Funcionário Identificado</h3>
+    <div class="form-group">
+      <label>👤 Nome</label>
+      <input type="text" id="campoNome" readonly>
+    </div>
+    <div class="form-group">
+      <label>🏥 Setor</label>
+      <input type="text" id="campoSetor" readonly>
+    </div>
+    <div class="form-group">
+      <label>📋 Matrícula</label>
+      <input type="text" id="campoMat" readonly>
+    </div>
+    <div class="form-group">
+      <label>💰 Valor Consumido</label>
+      <div class="valor-wrap">
+        <span class="rs">R$</span>
+        <input type="text" id="campoValor" placeholder="0,00" inputmode="decimal" autocomplete="off">
+      </div>
+    </div>
+    <button class="btn btn-registrar" id="btnRegistrar">✅ Registrar Consumo</button>
+  </div>
+
+  <!-- ETAPA 3: SUCESSO -->
+  <div id="sucessoBox" class="sucesso-box">
+    <div class="check">✅</div>
+    <h3 id="msgSucesso">Consumo registrado!</h3>
+    <div class="valor-big" id="msgValor"></div>
+    <div class="proto" id="msgProto"></div>
+    <div class="email-info" id="msgEmail"></div>
+    <a id="btnWpp" class="btn btn-wpp" href="#" target="_blank">📱 Enviar Comprovante por WhatsApp</a>
+    <button class="btn btn-novo" id="btnNovo">🔄 Novo Registro</button>
+  </div>
+</div>
+
+<script>
+var funcionarioAtual = null;
+var matriculaInicial = '<?= matriculaInicial ?>';
+
+document.addEventListener('DOMContentLoaded', function() {
+
+  document.getElementById('btnBuscar').addEventListener('click', buscarFuncionario);
+  document.getElementById('btnRegistrar').addEventListener('click', registrarConsumo);
+  document.getElementById('btnNovo').addEventListener('click', novoRegistro);
+  document.getElementById('btnSalvarCadastro').addEventListener('click', salvarCadastro);
+
+  document.getElementById('inputMatricula').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') buscarFuncionario();
+  });
+  document.getElementById('campoValor').addEventListener('keypress', function(e) {
+    if (e.key === 'Enter') registrarConsumo();
+  });
+
+  if (matriculaInicial && matriculaInicial.trim() !== '') {
+    document.getElementById('inputMatricula').value = matriculaInicial;
+    buscarFuncionario();
+  }
+});
+
+// ====== BUSCAR FUNCIONÁRIO ======
+function buscarFuncionario() {
+  var mat = document.getElementById('inputMatricula').value.trim();
+  if (!mat) { mostrarMsg('Digite a matrícula.', 'erro'); return; }
+
+  var btn = document.getElementById('btnBuscar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span> Buscando...';
+  esconderMsg();
+  document.getElementById('dadosBox').classList.remove('visivel');
+  document.getElementById('cadastroBox').classList.remove('visivel');
+  document.getElementById('sucessoBox').classList.remove('visivel');
+
+  google.script.run
+    .withSuccessHandler(function(r) {
+      btn.disabled = false;
+      btn.innerHTML = '🔍 Buscar Funcionário';
+
+      if (r.encontrado) {
+        funcionarioAtual = r;
+
+        // Verifica se faltam dados (setor, email ou telefone)
+        var faltaSetor = !r.setor || r.setor.trim() === '';
+        var faltaEmail = !r.email || r.email.trim() === '' || r.email.indexOf('@') === -1;
+        var faltaTelefone = !r.telefone || r.telefone.toString().replace(/\D/g, '').length < 10;
+
+        if (faltaSetor || faltaEmail || faltaTelefone) {
+          // Mostra tela de cadastro
+          document.getElementById('cadNome').value = r.nome;
+          document.getElementById('cadSetor').value = r.setor || '';
+          document.getElementById('cadEmail').value = r.email || '';
+          document.getElementById('cadTelefone').value = r.telefone || '';
+          document.getElementById('cadastroBox').classList.add('visivel');
+          mostrarMsg('⚠️ Primeiro acesso! Complete seus dados abaixo.', 'aviso');
+        } else {
+          // Fluxo normal
+          mostrarDadosFuncionario(r);
+        }
+      } else {
+        funcionarioAtual = null;
+        mostrarMsg('❌ ' + (r.mensagem || 'Matrícula não encontrada!'), 'erro');
+      }
+    })
+    .withFailureHandler(function(err) {
+      btn.disabled = false;
+      btn.innerHTML = '🔍 Buscar Funcionário';
+      mostrarMsg('❌ Erro: ' + err.message, 'erro');
+    })
+    .buscarFuncionario(mat);
+}
+
+// ====== SALVAR CADASTRO ======
+function salvarCadastro() {
+  var setor = document.getElementById('cadSetor').value.trim();
+  var email = document.getElementById('cadEmail').value.trim();
+  var telefone = document.getElementById('cadTelefone').value.trim();
+
+  if (!setor) { mostrarMsg('Preencha o setor.', 'erro'); return; }
+  if (!email || email.indexOf('@') === -1) { mostrarMsg('Preencha um e-mail válido.', 'erro'); return; }
+  if (!telefone || telefone.replace(/\D/g, '').length < 10) { mostrarMsg('Preencha o WhatsApp com DDD.', 'erro'); return; }
+
+  var btn = document.getElementById('btnSalvarCadastro');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span> Salvando...';
+
+  var dados = {
+    matricula: funcionarioAtual.matricula,
+    setor: setor,
+    email: email,
+    telefone: telefone.replace(/\D/g, '')
+  };
+
+  google.script.run
+    .withSuccessHandler(function(r) {
+      btn.disabled = false;
+      btn.innerHTML = '💾 Salvar e Continuar';
+
+      if (r.sucesso) {
+        // Atualiza dados do funcionário atual
+        funcionarioAtual.setor = setor;
+        funcionarioAtual.email = email;
+        funcionarioAtual.telefone = telefone.replace(/\D/g, '');
+
+        document.getElementById('cadastroBox').classList.remove('visivel');
+        mostrarDadosFuncionario(funcionarioAtual);
+        mostrarMsg('✅ Cadastro salvo! Agora informe o valor.', 'ok');
+      } else {
+        mostrarMsg('❌ ' + (r.mensagem || 'Erro ao salvar'), 'erro');
+      }
+    })
+    .withFailureHandler(function(err) {
+      btn.disabled = false;
+      btn.innerHTML = '💾 Salvar e Continuar';
+      mostrarMsg('❌ Erro: ' + err.message, 'erro');
+    })
+    .atualizarCadastroFuncionario(dados);
+}
+
+// ====== MOSTRAR DADOS ======
+function mostrarDadosFuncionario(r) {
+  document.getElementById('campoNome').value = r.nome;
+  document.getElementById('campoSetor').value = r.setor;
+  document.getElementById('campoMat').value = r.matricula;
+  document.getElementById('campoValor').value = '';
+  document.getElementById('dadosBox').classList.add('visivel');
+  mostrarMsg('Funcionário encontrado! Informe o valor.', 'info');
+  setTimeout(function() { document.getElementById('campoValor').focus(); }, 300);
+}
+
+// ====== REGISTRAR CONSUMO ======
+function registrarConsumo() {
+  var valor = document.getElementById('campoValor').value.trim();
+  if (!valor) { mostrarMsg('Informe o valor gasto.', 'erro'); return; }
+  if (!funcionarioAtual) { mostrarMsg('Busque o funcionário primeiro.', 'erro'); return; }
+
+  var btn = document.getElementById('btnRegistrar');
+  btn.disabled = true;
+  btn.innerHTML = '<span class="loading"></span> Registrando...';
+
+  var dados = {
+    matricula: funcionarioAtual.matricula,
+    nome: funcionarioAtual.nome,
+    setor: funcionarioAtual.setor,
+    email: funcionarioAtual.email,
+    telefone: funcionarioAtual.telefone,
+    valor: valor
+  };
+
+  google.script.run
+    .withSuccessHandler(function(r) {
+      btn.disabled = false;
+      btn.innerHTML = '✅ Registrar Consumo';
+
+      if (r.sucesso) {
+        document.getElementById('etapaMatricula').style.display = 'none';
+        document.getElementById('dadosBox').classList.remove('visivel');
+        esconderMsg();
+
+        document.getElementById('msgSucesso').textContent = r.mensagem;
+        document.getElementById('msgValor').textContent = r.valorFormatado;
+        document.getElementById('msgProto').textContent = '🔖 Protocolo: ' + r.protocolo;
+
+        if (r.emailEnviado) {
+          document.getElementById('msgEmail').textContent = '📧 Comprovante enviado por e-mail!';
+        } else {
+          document.getElementById('msgEmail').textContent = '';
+        }
+
+        var btnWpp = document.getElementById('btnWpp');
+        if (r.whatsappLink && r.whatsappLink !== '') {
+          btnWpp.href = r.whatsappLink;
+          btnWpp.style.display = 'block';
+        } else {
+          btnWpp.style.display = 'none';
+        }
+
+        document.getElementById('sucessoBox').classList.add('visivel');
+      } else {
+        mostrarMsg('❌ ' + r.mensagem, 'erro');
+      }
+    })
+    .withFailureHandler(function(err) {
+      btn.disabled = false;
+      btn.innerHTML = '✅ Registrar Consumo';
+      mostrarMsg('❌ Erro: ' + err.message, 'erro');
+    })
+    .registrarConsumo(dados);
+}
+
+// ====== NOVO REGISTRO ======
+function novoRegistro() {
+  funcionarioAtual = null;
+  document.getElementById('inputMatricula').value = '';
+  document.getElementById('campoNome').value = '';
+  document.getElementById('campoSetor').value = '';
+  document.getElementById('campoMat').value = '';
+  document.getElementById('campoValor').value = '';
+  document.getElementById('dadosBox').classList.remove('visivel');
+  document.getElementById('cadastroBox').classList.remove('visivel');
+  document.getElementById('sucessoBox').classList.remove('visivel');
+  document.getElementById('etapaMatricula').style.display = 'block';
+  esconderMsg();
+  document.getElementById('inputMatricula').focus();
+}
+
+function mostrarMsg(texto, tipo) {
+  var el = document.getElementById('msg');
+  el.className = 'msg ' + tipo;
+  el.textContent = texto;
+}
+function esconderMsg() {
+  var el = document.getElementById('msg');
+  el.className = 'msg';
+  el.textContent = '';
+}
+</script>
+</body>
+</html>
