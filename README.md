@@ -261,6 +261,10 @@ Ideias para contribuições futuras:
 
 <img src="docs/ASSETS/image_38.png" width="160px" alt="Blue Frog Smart Solutions Logo"><br>
 
+## 👤 Autor
+
+**Marcelo Santos**
+*Desenvolvedor Full Stack & TI no Hospital São Vicente de Paulo*
 ### 🐸 Blue Frog Smart Solutions
 
 ⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
