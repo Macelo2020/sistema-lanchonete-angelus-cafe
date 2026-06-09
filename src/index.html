@@ -2,6 +2,8 @@
 <html>
 <head>
   <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -20,10 +22,12 @@
       width: 100%;
       max-width: 440px;
       box-shadow: 0 20px 60px rgba(0,0,0,0.3);
+      min-height: 500px;
+      display: flex;
+      flex-direction: column;
     }
     .header { text-align:center; margin-bottom:25px; }
-    .header .icon { font-size:48px; }
-    .header h1 { color:#333; font-size:20px; margin-top:8px; }
+    .header h1 { color:#333; font-size:20px; margin-top:8px; font-weight: 700; }
     .header p { color:#999; font-size:13px; margin-top:4px; }
     .msg {
       padding:12px 16px; border-radius:10px; margin-bottom:18px;
@@ -38,26 +42,25 @@
       display:block; color:#555; font-size:12px; font-weight:700;
       margin-bottom:5px; text-transform:uppercase; letter-spacing:.5px;
     }
-    .form-group input, .form-group select {
+    .form-group input {
       width:100%; padding:13px 15px; border:2px solid #e0e0e0;
       border-radius:12px; font-size:16px; outline:none; transition:border-color .3s;
     }
-    .form-group input:focus, .form-group select:focus { border-color:#667eea; }
+    .form-group input:focus { border-color:#667eea; }
     .form-group input[readonly] {
       background:#f0f4f0; color:#333; font-weight:600;
       cursor:default; border-color:#c8e6c9;
     }
-    .form-group .hint {
-      font-size:11px; color:#999; margin-top:3px;
-    }
+    .form-group .hint { font-size:11px; color:#999; margin-top:3px; }
     .valor-wrap { position:relative; }
     .valor-wrap .rs {
       position:absolute; left:15px; top:50%; transform:translateY(-50%);
       color:#888; font-weight:700; font-size:16px;
     }
     .valor-wrap input { padding-left:42px; }
+    
     .btn {
-      width:100%; padding:14px; border:none; border-radius:12px;
+      width:100%; padding:15px; border:none; border-radius:12px;
       font-size:15px; font-weight:700; cursor:pointer;
       transition:all .3s; text-transform:uppercase; letter-spacing:.8px;
       display:block; text-align:center; text-decoration:none;
@@ -69,196 +72,223 @@
     .btn-registrar:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 20px rgba(67,160,71,.4); }
     .btn-salvar { background:linear-gradient(135deg,#ff9800,#f57c00); color:#fff; margin-bottom:10px; }
     .btn-salvar:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 20px rgba(255,152,0,.4); }
-    .btn-wpp { background:linear-gradient(135deg,#25d366,#128c7e); color:#fff; margin-top:10px; display:none; }
+    
+    /* STYLE DO BOTÃO WHATSAPP GREEN GRADIENT */
+    .btn-wpp { background: linear-gradient(135deg, #25d366, #128c7e); color:#fff; margin-top:15px; display:none; }
     .btn-wpp:hover { transform:translateY(-2px); box-shadow:0 5px 20px rgba(37,211,102,.4); }
-    .btn-novo { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; margin-top:12px; }
-    .dados-box {
-      display:none; background:#f8faf8; border:2px solid #c8e6c9;
-      border-radius:14px; padding:20px; margin-top:15px;
-    }
+    
+    .btn-novo { background: linear-gradient(135deg, #667eea, #764ba2); color:#fff; margin-top:12px; display:none; }
+    
+    .dados-box { display:none; background:#f8fafc; border:2px solid #cbd5e1; border-radius:14px; padding:20px; margin-top:15px; }
     .dados-box.visivel { display:block; animation:slide .3s ease; }
-    .dados-box h3 {
-      color:#2e7d32; font-size:13px; margin-bottom:15px;
-      text-transform:uppercase; letter-spacing:.5px;
-    }
-    /* CADASTRO BOX */
-    .cadastro-box {
-      display:none; background:#fff8e1; border:2px solid #ffcc80;
-      border-radius:14px; padding:20px; margin-top:15px;
-    }
+    .dados-box h3 { color:#475569; font-size:13px; margin-bottom:15px; text-transform:uppercase; }
+    
+    .cadastro-box { display:none; background:#fff8e1; border:2px solid #ffcc80; border-radius:14px; padding:20px; margin-top:15px; }
     .cadastro-box.visivel { display:block; animation:slide .3s ease; }
-    .cadastro-box h3 {
-      color:#e65100; font-size:13px; margin-bottom:15px;
-      text-transform:uppercase; letter-spacing:.5px;
-    }
-    .sucesso-box {
-      display:none; text-align:center; padding:25px;
-      background:#f1f8e9; border:2px solid #aed581;
-      border-radius:14px; margin-top:15px;
-    }
+    .cadastro-box h3 { color:#e65100; font-size:13px; margin-bottom:15px; text-transform:uppercase; }
+    
+    .sucesso-box { display:none; text-align:center; padding:25px 20px; background:#e8f5e9; border:1px solid #c8e6c9; border-radius:16px; margin-top:15px; }
     .sucesso-box.visivel { display:block; animation:slide .3s ease; }
-    .sucesso-box .check { font-size:50px; }
-    .sucesso-box h3 { color:#2e7d32; margin:10px 0 5px; font-size:16px; }
-    .sucesso-box .valor-big { font-size:28px; font-weight:bold; color:#333; margin:5px 0; }
-    .sucesso-box .proto { color:#aaa; font-size:11px; margin-top:10px; }
-    .sucesso-box .email-info { font-size:12px; color:#888; margin-top:8px; }
-    .loading {
-      display:inline-block; width:18px; height:18px;
-      border:3px solid rgba(255,255,255,.3); border-radius:50%;
-      border-top-color:#fff; animation:spin .8s linear infinite;
-      vertical-align:middle; margin-right:6px;
-    }
+    .sucesso-box .check { font-size:45px; color: #4caf50; margin-bottom: 10px; }
+    .sucesso-box h3 { color:#1e4620; margin:5px 0; font-size:16px; font-weight: 700; }
+    .sucesso-box .valor-big { font-size:32px; font-weight:bold; color:#2e7d32; margin:10px 0; }
+    
+    .sucesso-box .proto { color:#666; font-size:12px; margin-top:8px; background:#fff; padding:6px; border-radius:8px; border:1px dashed #ccc; }
+    
+    .loading { display:inline-block; width:18px; height:18px; border:3px solid rgba(255,255,255,.3); border-radius:50%; border-top-color:#fff; animation:spin .8s linear infinite; vertical-align:middle; margin-right:6px; }
     @keyframes spin { to { transform:rotate(360deg); } }
-    @keyframes slide {
-      from { opacity:0; transform:translateY(-10px); }
-      to { opacity:1; transform:translateY(0); }
-    }
+    @keyframes slide { from { opacity:0; transform:translateY(-10px); } to { opacity:1; transform:translateY(0); } }
+    .logo-angelus { width: 80px; height: 80px; object-fit: contain; margin-bottom: 8px; }
+    .rodape { text-align: center; margin-top: auto; padding-top: 20px; border-top: 1px solid #eee; }
+    .logo-bluefrog { width: 65px; height: 65px; object-fit: contain; margin-bottom: 8px; }
+    .rodape-texto { font-size: 14px; color: #666; margin-top: 8px; }
+    .rodape-texto strong { color: #667eea; font-size: 15px; }
+    .rodape-versao { font-size: 13px; color: #888; margin-top: 5px; }
+    #areaMeuQRCode { display:none; text-align:center; padding:25px; background:#fff; border-radius:15px; border:3px solid #667eea; margin-top:15px; }
+    #areaMeuQRCode.visivel { display:block; animation:slide .3s ease; }
+    #areaMeuQRCode h3 { color:#764ba2; font-size:18px; margin-bottom:15px; }
+    #areaMeuQRCode p { font-size:13px; color:#666; margin-top:15px; }
+    #areaMeuQRCode strong { display:block; margin-bottom:8px; }
+    .conteudo { flex: 1; }
   </style>
 </head>
 <body>
 <div class="container">
   <div class="header">
-    <div class="icon">🍔</div>
+    <img src="https://lh3.googleusercontent.com/d/1BT7CrZdm4Sog5Q4RAXlNXnbStEFnhoJP" alt="Lanchonete Angelus" class="logo-angelus">
     <h1>Lanchonete Angelus</h1>
-    <p>Registro de Consumo via QR Code</p>
+    <p id="subtituloPrincipal">Registro de Consumo via QR Code</p>
   </div>
   <div id="msg" class="msg"></div>
 
-  <!-- ETAPA 1: MATRÍCULA -->
-  <div id="etapaMatricula">
-    <div class="form-group">
-      <label>📋 Matrícula do Funcionário</label>
-      <input type="text" id="inputMatricula" placeholder="Escaneie o QR Code ou digite" inputmode="numeric" autocomplete="off">
-    </div>
-    <button class="btn btn-buscar" id="btnBuscar">🔍 Buscar Funcionário</button>
-  </div>
-
-  <!-- ETAPA CADASTRO: Completar dados na 1ª compra -->
-  <div id="cadastroBox" class="cadastro-box">
-    <h3>⚠️ Complete seu cadastro (apenas 1ª vez)</h3>
-    <div class="form-group">
-      <label>👤 Nome</label>
-      <input type="text" id="cadNome" readonly>
-    </div>
-    <div class="form-group">
-      <label>🏥 Setor</label>
-      <input type="text" id="cadSetor" placeholder="Ex: Enfermagem, Recepção, TI...">
-    </div>
-    <div class="form-group">
-      <label>📧 E-mail</label>
-      <input type="email" id="cadEmail" placeholder="seu.email@hospital.com">
-      <div class="hint">Para receber comprovantes de consumo</div>
-    </div>
-    <div class="form-group">
-      <label>📱 WhatsApp (com DDD)</label>
-      <input type="text" id="cadTelefone" placeholder="Ex: 83988024149" inputmode="numeric">
-      <div class="hint">Para receber comprovantes por WhatsApp</div>
-    </div>
-    <button class="btn btn-salvar" id="btnSalvarCadastro">💾 Salvar e Continuar</button>
-  </div>
-
-  <!-- ETAPA 2: DADOS + VALOR -->
-  <div id="dadosBox" class="dados-box">
-    <h3>✅ Funcionário Identificado</h3>
-    <div class="form-group">
-      <label>👤 Nome</label>
-      <input type="text" id="campoNome" readonly>
-    </div>
-    <div class="form-group">
-      <label>🏥 Setor</label>
-      <input type="text" id="campoSetor" readonly>
-    </div>
-    <div class="form-group">
-      <label>📋 Matrícula</label>
-      <input type="text" id="campoMat" readonly>
-    </div>
-    <div class="form-group">
-      <label>💰 Valor Consumido</label>
-      <div class="valor-wrap">
-        <span class="rs">R$</span>
-        <input type="text" id="campoValor" placeholder="0,00" inputmode="decimal" autocomplete="off">
+  <div class="conteudo">
+    <div id="etapaMatricula">
+      <div class="form-group">
+        <label>📋 Matrícula do Funcionário</label>
+        <input type="text" id="inputMatricula" placeholder="Aguardando leitura do QR Code..." inputmode="numeric">
       </div>
+      <button class="btn btn-buscar" id="btnBuscar">🔍 Buscar Funcionário</button>
     </div>
-    <button class="btn btn-registrar" id="btnRegistrar">✅ Registrar Consumo</button>
+
+    <div id="cadastroBox" class="cadastro-box">
+      <h3>⚠️ Complete seu cadastro (apenas 1ª vez)</h3>
+      <div class="form-group">
+        <label>👤 Nome</label>
+        <input type="text" id="cadNome" readonly>
+      </div>
+      <div class="form-group">
+        <label>🏥 Setor</label>
+        <input type="text" id="cadSetor" placeholder="Ex: Enfermagem, Recepção, TI...">
+      </div>
+      <div class="form-group">
+        <label>📧 E-mail</label>
+        <input type="email" id="cadEmail" placeholder="seu.email@hospital.com">
+        <div class="hint">Para receber comprovantes de consumo</div>
+      </div>
+      <div class="form-group">
+        <label>📱 WhatsApp (com DDD)</label>
+        <input type="text" id="cadTelefone" placeholder="Ex: 83988024149" inputmode="numeric">
+        <div class="hint">Para receber comprovantes por WhatsApp</div>
+      </div>
+      <button class="btn btn-salvar" id="btnSalvarCadastro">💾 Salvar e Continuar</button>
+    </div>
+
+    <div id="dadosBox" class="dados-box">
+      <h3>✅ Colaborador Identificado</h3>
+      <div class="form-group">
+        <label>👤 Nome</label>
+        <input type="text" id="campoNome" readonly>
+      </div>
+      <div class="form-group">
+        <label>🏥 Setor</label>
+        <input type="text" id="campoSetor" readonly>
+      </div>
+      <div class="form-group">
+        <label>📋 Matrícula</label>
+        <input type="text" id="campoMat" readonly>
+      </div>
+      <div class="form-group">
+        <label>💰 Valor Consumido</label>
+        <div class="valor-wrap">
+          <span class="rs">R$</span>
+          <input type="text" id="campoValor" placeholder="0,00" inputmode="decimal">
+        </div>
+      </div>
+      <button class="btn btn-registrar" id="btnRegistrar">✅ Registrar Consumo</button>
+    </div>
+
+    <div id="sucessoBox" class="sucesso-box">
+      <div class="check">✔</div>
+      <h3 id="msgSucesso">Consumo registrado!</h3>
+      <div class="valor-big" id="msgValor">R$ 0,00</div>
+      <div class="proto" id="msgProto"></div>
+      <div id="msgEmail" style="font-size:13px; color:#555; margin-top:5px;"></div>
+      
+      <a id="btnWpp" class="btn btn-wpp" href="#" target="_blank">✉ ENVIAR COMPROVANTE POR WHATSAPP</a>
+      <button class="btn btn-novo" id="btnNovo">🔄 NOVO REGISTRO</button>
+    </div>
+
+    <div id="areaMeuQRCode">
+      <h3>📱 Seu QR Code Gerado</h3>
+      <div id="imagemQRCodeFinal"></div>
+      <p>
+        <strong>Mostre esta tela ao atendente para registrar seu consumo.</strong>
+        <strong>Dica: Tire um print para usar sempre!</strong>
+      </p>
+      <button class="btn btn-novo" id="btnSairQR">Sair / Novo</button>
+    </div>
   </div>
 
-  <!-- ETAPA 3: SUCESSO -->
-  <div id="sucessoBox" class="sucesso-box">
-    <div class="check">✅</div>
-    <h3 id="msgSucesso">Consumo registrado!</h3>
-    <div class="valor-big" id="msgValor"></div>
-    <div class="proto" id="msgProto"></div>
-    <div class="email-info" id="msgEmail"></div>
-    <a id="btnWpp" class="btn btn-wpp" href="#" target="_blank">📱 Enviar Comprovante por WhatsApp</a>
-    <button class="btn btn-novo" id="btnNovo">🔄 Novo Registro</button>
+  <div class="rodape">
+    <img src="https://lh3.googleusercontent.com/d/1Qbi5Q2gz8W2fX17Y-A3otSMrZUEKb_p5" alt="Blue Frog" class="logo-bluefrog">
+    <p class="rodape-texto">Desenvolvido por: <strong>Blue Frog</strong>- Estúdio Creativo</p>
+    <p class="rodape-versao">v3.8 - Junho de 2026</p>
   </div>
+
 </div>
 
 <script>
 var funcionarioAtual = null;
 var matriculaInicial = '<?= matriculaInicial ?>';
+var atendenteInicial = '<?= atendenteInicial ?>';
+var eAtendente = (atendenteInicial === 'true');
+var timerRetorno = null;
 
 document.addEventListener('DOMContentLoaded', function() {
+  if (eAtendente === true) {
+    document.getElementById('subtituloPrincipal').textContent = "Painel do Operador - Balcão";
+  }
 
-  document.getElementById('btnBuscar').addEventListener('click', buscarFuncionario);
+  document.getElementById('btnBuscar').addEventListener('click', function() { buscarFuncionario(); });
   document.getElementById('btnRegistrar').addEventListener('click', registrarConsumo);
   document.getElementById('btnNovo').addEventListener('click', novoRegistro);
   document.getElementById('btnSalvarCadastro').addEventListener('click', salvarCadastro);
+  document.getElementById('btnSairQR').addEventListener('click', novoRegistro);
 
   document.getElementById('inputMatricula').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') buscarFuncionario();
   });
+
   document.getElementById('campoValor').addEventListener('keypress', function(e) {
     if (e.key === 'Enter') registrarConsumo();
   });
 
   if (matriculaInicial && matriculaInicial.trim() !== '') {
     document.getElementById('inputMatricula').value = matriculaInicial;
-    buscarFuncionario();
+    setTimeout(function() {
+      buscarFuncionario();
+    }, 500);
   }
 });
 
-// ====== BUSCAR FUNCIONÁRIO ======
 function buscarFuncionario() {
   var mat = document.getElementById('inputMatricula').value.trim();
-  if (!mat) { mostrarMsg('Digite a matrícula.', 'erro'); return; }
+  if (!mat) { 
+    mostrarMsg('Digite a matrícula.', 'erro'); 
+    return; 
+  }
 
   var btn = document.getElementById('btnBuscar');
   btn.disabled = true;
   btn.innerHTML = '<span class="loading"></span> Buscando...';
   esconderMsg();
+  
+  if (timerRetorno) clearTimeout(timerRetorno);
+
   document.getElementById('dadosBox').classList.remove('visivel');
   document.getElementById('cadastroBox').classList.remove('visivel');
   document.getElementById('sucessoBox').classList.remove('visivel');
+  document.getElementById('areaMeuQRCode').classList.remove('visivel');
 
   google.script.run
     .withSuccessHandler(function(r) {
       btn.disabled = false;
       btn.innerHTML = '🔍 Buscar Funcionário';
 
-      if (r.encontrado) {
+      if (r && r.encontrado) {
         funcionarioAtual = r;
 
-        // Verifica se faltam dados (setor, email ou telefone)
         var faltaSetor = !r.setor || r.setor.trim() === '';
         var faltaEmail = !r.email || r.email.trim() === '' || r.email.indexOf('@') === -1;
         var faltaTelefone = !r.telefone || r.telefone.toString().replace(/\D/g, '').length < 10;
 
         if (faltaSetor || faltaEmail || faltaTelefone) {
-          // Mostra tela de cadastro
           document.getElementById('cadNome').value = r.nome;
           document.getElementById('cadSetor').value = r.setor || '';
           document.getElementById('cadEmail').value = r.email || '';
           document.getElementById('cadTelefone').value = r.telefone || '';
           document.getElementById('cadastroBox').classList.add('visivel');
-          mostrarMsg('⚠️ Primeiro acesso! Complete seus dados abaixo.', 'aviso');
+          mostrarMsg('⚠️ Complete seu cadastro!', 'aviso');
         } else {
-          // Fluxo normal
-          mostrarDadosFuncionario(r);
+          if (eAtendente === true) {
+            mostrarDadosFuncionario(r);
+            mostrarMsg('✅ Informe o valor consumido!', 'ok');
+          } else {
+            exibirQRCodeDeAutorizacao(r.matricula);
+          }
         }
       } else {
-        funcionarioAtual = null;
-        mostrarMsg('❌ ' + (r.mensagem || 'Matrícula não encontrada!'), 'erro');
+        mostrarMsg('❌ Matrícula não encontrada!', 'erro');
       }
     })
     .withFailureHandler(function(err) {
@@ -269,43 +299,39 @@ function buscarFuncionario() {
     .buscarFuncionario(mat);
 }
 
-// ====== SALVAR CADASTRO ======
 function salvarCadastro() {
   var setor = document.getElementById('cadSetor').value.trim();
   var email = document.getElementById('cadEmail').value.trim();
   var telefone = document.getElementById('cadTelefone').value.trim();
 
-  if (!setor) { mostrarMsg('Preencha o setor.', 'erro'); return; }
-  if (!email || email.indexOf('@') === -1) { mostrarMsg('Preencha um e-mail válido.', 'erro'); return; }
-  if (!telefone || telefone.replace(/\D/g, '').length < 10) { mostrarMsg('Preencha o WhatsApp com DDD.', 'erro'); return; }
+  if (!setor || !email || !telefone) { 
+    mostrarMsg('Preencha todos os campos!', 'erro');
+    return; 
+  }
 
   var btn = document.getElementById('btnSalvarCadastro');
   btn.disabled = true;
   btn.innerHTML = '<span class="loading"></span> Salvando...';
 
-  var dados = {
-    matricula: funcionarioAtual.matricula,
-    setor: setor,
-    email: email,
-    telefone: telefone.replace(/\D/g, '')
-  };
-
   google.script.run
     .withSuccessHandler(function(r) {
       btn.disabled = false;
       btn.innerHTML = '💾 Salvar e Continuar';
 
-      if (r.sucesso) {
-        // Atualiza dados do funcionário atual
+      if (r && r.sucesso) {
         funcionarioAtual.setor = setor;
         funcionarioAtual.email = email;
-        funcionarioAtual.telefone = telefone.replace(/\D/g, '');
+        funcionarioAtual.telefone = telefone;
 
-        document.getElementById('cadastroBox').classList.remove('visivel');
-        mostrarDadosFuncionario(funcionarioAtual);
-        mostrarMsg('✅ Cadastro salvo! Agora informe o valor.', 'ok');
+        if (eAtendente === true) {
+           mostrarDadosFuncionario(funcionarioAtual);
+           document.getElementById('cadastroBox').classList.remove('visivel');
+        } else {
+           exibirQRCodeDeAutorizacao(funcionarioAtual.matricula);
+           document.getElementById('cadastroBox').classList.remove('visivel');
+        }
       } else {
-        mostrarMsg('❌ ' + (r.mensagem || 'Erro ao salvar'), 'erro');
+        mostrarMsg('❌ Erro ao salvar!', 'erro');
       }
     })
     .withFailureHandler(function(err) {
@@ -313,70 +339,96 @@ function salvarCadastro() {
       btn.innerHTML = '💾 Salvar e Continuar';
       mostrarMsg('❌ Erro: ' + err.message, 'erro');
     })
-    .atualizarCadastroFuncionario(dados);
+    .atualizarCadastroFuncionario({
+      matricula: funcionarioAtual.matricula,
+      setor: setor,
+      email: email,
+      telefone: telefone.replace(/\D/g, '')
+    });
 }
 
-// ====== MOSTRAR DADOS ======
+function exibirQRCodeDeAutorizacao(matricula) {
+  google.script.run.withSuccessHandler(function(urlBase) {
+    const linkParaAtendente = urlBase + '?atendente=true&m=' + encodeURIComponent(matricula);
+    const qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=250x250&data=' + encodeURIComponent(linkParaAtendente);
+    
+    document.getElementById('imagemQRCodeFinal').innerHTML = '<img src="' + qrImgUrl + '" style="width:220px; height:220px; border-radius:10px; border:3px solid #667eea;">';
+    document.getElementById('etapaMatricula').style.display = 'none';
+    document.getElementById('areaMeuQRCode').classList.add('visivel');
+  }).getWebAppUrl();
+}
+
 function mostrarDadosFuncionario(r) {
   document.getElementById('campoNome').value = r.nome;
   document.getElementById('campoSetor').value = r.setor;
   document.getElementById('campoMat').value = r.matricula;
   document.getElementById('campoValor').value = '';
+  
+  document.getElementById('etapaMatricula').style.display = 'none';
+  document.getElementById('areaMeuQRCode').classList.remove('visivel');
   document.getElementById('dadosBox').classList.add('visivel');
-  mostrarMsg('Funcionário encontrado! Informe o valor.', 'info');
-  setTimeout(function() { document.getElementById('campoValor').focus(); }, 300);
+  
+  setTimeout(function() { 
+    document.getElementById('campoValor').focus(); 
+  }, 300);
 }
 
-// ====== REGISTRAR CONSUMO ======
 function registrarConsumo() {
   var valor = document.getElementById('campoValor').value.trim();
-  if (!valor) { mostrarMsg('Informe o valor gasto.', 'erro'); return; }
-  if (!funcionarioAtual) { mostrarMsg('Busque o funcionário primeiro.', 'erro'); return; }
+  if (!valor) { 
+    mostrarMsg('Informe o valor!', 'erro'); 
+    return; 
+  }
 
   var btn = document.getElementById('btnRegistrar');
   btn.disabled = true;
   btn.innerHTML = '<span class="loading"></span> Registrando...';
 
-  var dados = {
-    matricula: funcionarioAtual.matricula,
-    nome: funcionarioAtual.nome,
-    setor: funcionarioAtual.setor,
-    email: funcionarioAtual.email,
-    telefone: funcionarioAtual.telefone,
-    valor: valor
-  };
+  // EXTRAÇÃO DO TELEFONE LOCAL DO DISPOSITIVO ATENDENTE COM DDD
+  var foneLimpo = funcionarioAtual.telefone.toString().replace(/\D/g, '');
+  if (foneLimpo.length === 10 || foneLimpo.length === 11) foneLimpo = '55' + foneLimpo;
+  
+  var valorFmtLocal = 'R$ ' + parseFloat(valor.replace(',', '.')).toFixed(2).replace('.', ',');
+  var msgWppLocal = '🍔 *COMPROVANTE - Lanchonete Angelus*\n\n'
+    + '👤 *Nome:* ' + funcionarioAtual.nome + '\n'
+    + '📋 *Matrícula:* ' + funcionarioAtual.matricula + '\n'
+    + '🏥 *Setor:* ' + funcionarioAtual.setor + '\n'
+    + '💰 *Valor:* ' + valorFmtLocal + '\n\n'
+    + '⚠️ _Este valor será descontado em folha._';
+  
+  var linkWhatsappPronto = 'https://api.whatsapp.com/send?phone=' + foneLimpo + '&text=' + encodeURIComponent(msgWppLocal);
 
   google.script.run
     .withSuccessHandler(function(r) {
       btn.disabled = false;
       btn.innerHTML = '✅ Registrar Consumo';
 
-      if (r.sucesso) {
+      if (r && r.sucesso) {
         document.getElementById('etapaMatricula').style.display = 'none';
         document.getElementById('dadosBox').classList.remove('visivel');
         esconderMsg();
 
-        document.getElementById('msgSucesso').textContent = r.mensagem;
-        document.getElementById('msgValor').textContent = r.valorFormatado;
-        document.getElementById('msgProto').textContent = '🔖 Protocolo: ' + r.protocolo;
+        document.getElementById('msgSucesso').textContent = 'Consumo registrado para ' + funcionarioAtual.nome + '!';
+        document.getElementById('msgValor').textContent = r.valorFormatated || valorFmtLocal;
+        document.getElementById('msgProto').innerHTML = '📋 <strong>Protocolo:</strong> ' + r.protocolo;
+        document.getElementById('msgEmail').innerHTML = '✉ Comprovante enviado por e-mail!';
 
-        if (r.emailEnviado) {
-          document.getElementById('msgEmail').textContent = '📧 Comprovante enviado por e-mail!';
+        if (eAtendente === true) {
+          document.getElementById('btnNovo').style.display = 'none';
+          document.getElementById('btnWpp').href = linkWhatsappPronto;
+          document.getElementById('btnWpp').style.display = 'block';
+          
+          timerRetorno = setTimeout(function() {
+             novoRegistro();
+          }, 15000); 
         } else {
-          document.getElementById('msgEmail').textContent = '';
-        }
-
-        var btnWpp = document.getElementById('btnWpp');
-        if (r.whatsappLink && r.whatsappLink !== '') {
-          btnWpp.href = r.whatsappLink;
-          btnWpp.style.display = 'block';
-        } else {
-          btnWpp.style.display = 'none';
+          document.getElementById('btnWpp').style.display = 'none';
+          document.getElementById('btnNovo').style.display = 'block';
         }
 
         document.getElementById('sucessoBox').classList.add('visivel');
       } else {
-        mostrarMsg('❌ ' + r.mensagem, 'erro');
+        mostrarMsg('❌ Erro ao registrar!', 'erro');
       }
     })
     .withFailureHandler(function(err) {
@@ -384,34 +436,47 @@ function registrarConsumo() {
       btn.innerHTML = '✅ Registrar Consumo';
       mostrarMsg('❌ Erro: ' + err.message, 'erro');
     })
-    .registrarConsumo(dados);
+    .registrarConsumo({
+      matricula: funcionarioAtual.matricula,
+      nome: funcionarioAtual.nome,
+      setor: funcionarioAtual.setor,
+      email: funcionarioAtual.email,
+      telefone: funcionarioAtual.telefone,
+      valor: valor
+    });
 }
 
-// ====== NOVO REGISTRO ======
 function novoRegistro() {
+  if (timerRetorno) clearTimeout(timerRetorno);
   funcionarioAtual = null;
+  
   document.getElementById('inputMatricula').value = '';
-  document.getElementById('campoNome').value = '';
-  document.getElementById('campoSetor').value = '';
-  document.getElementById('campoMat').value = '';
   document.getElementById('campoValor').value = '';
+  
   document.getElementById('dadosBox').classList.remove('visivel');
   document.getElementById('cadastroBox').classList.remove('visivel');
   document.getElementById('sucessoBox').classList.remove('visivel');
-  document.getElementById('etapaMatricula').style.display = 'block';
+  document.getElementById('areaMeuQRCode').classList.remove('visivel');
+  
   esconderMsg();
-  document.getElementById('inputMatricula').focus();
+
+  if (eAtendente === true) {
+     document.getElementById('etapaMatricula').style.display = 'none';
+     document.getElementById('btnWpp').style.display = 'none'; 
+     mostrarMsg('📷 Aguardando leitura do QR Code do Funcionário...', 'info');
+  } else {
+     document.getElementById('etapaMatricula').style.display = 'block';
+     document.getElementById('inputMatricula').focus();
+  }
 }
 
 function mostrarMsg(texto, tipo) {
-  var el = document.getElementById('msg');
-  el.className = 'msg ' + tipo;
-  el.textContent = texto;
+  document.getElementById('msg').className = 'msg ' + tipo;
+  document.getElementById('msg').textContent = texto;
 }
+
 function esconderMsg() {
-  var el = document.getElementById('msg');
-  el.className = 'msg';
-  el.textContent = '';
+  document.getElementById('msg').className = 'msg';
 }
 </script>
 </body>

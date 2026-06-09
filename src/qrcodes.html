@@ -2,6 +2,8 @@
 <html>
 <head>
   <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
     body {
@@ -9,6 +11,8 @@
       background: #f5f5f5;
       padding: 20px;
     }
+    
+    /* MANTIDO SEU HEADER ORIGINAL */
     .header-page {
       text-align: center;
       background: linear-gradient(135deg, #667eea, #764ba2);
@@ -22,14 +26,16 @@
     }
     .header-page h1 { font-size: 22px; margin-bottom: 5px; }
     .header-page p { opacity: 0.9; font-size: 14px; }
+    
+    /* MENU TRIPO INTEGRADO COMTEMPLANDO O SEU PADRÃO */
     .nav-links {
       text-align: center;
-      margin-bottom: 15px;
+      margin-bottom: 25px;
     }
     .nav-links a {
       display: inline-block;
-      background: linear-gradient(135deg, #667eea, #764ba2);
-      color: #fff;
+      background: rgba(118, 75, 162, 0.15);
+      color: #764ba2;
       text-decoration: none;
       padding: 10px 20px;
       border-radius: 10px;
@@ -37,11 +43,20 @@
       font-weight: 600;
       margin: 0 5px;
       transition: all .3s;
+      border: 1px solid rgba(118, 75, 162, 0.3);
     }
     .nav-links a:hover {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
       transform: translateY(-2px);
       box-shadow: 0 5px 15px rgba(102,126,234,.4);
     }
+    .nav-links a.ativo {
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.15);
+    }
+
     .acoes {
       text-align: center;
       margin-bottom: 15px;
@@ -151,7 +166,6 @@
     .cartao hr { border: none; border-top: 1px dashed #ddd; margin: 12px 0; }
     .cartao .rodape { font-size: 10px; color: #bbb; }
 
-    /* BOTÃO IMPRIMIR INDIVIDUAL */
     .btn-individual {
       margin-top: 10px;
       background: linear-gradient(135deg, #1976d2, #42a5f5);
@@ -186,11 +200,11 @@
   </div>
 
   <div class="nav-links">
-    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=painel" target="_top">📊 Painel Diário</a>
-    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=relatorio" target="_top">📋 Relatório</a>
+    <a href="#" id="lnkPainel">📊 Painel Diário</a>
+    <a href="#" id="lnkRelatorio">📋 Relatório Mensal</a>
+    <a href="#" id="lnkQrCode" class="ativo">📱 QR Codes</a>
   </div>
 
-  <!-- BUSCA / FILTRO -->
   <div class="busca-box">
     <div class="campo">
       <label>🔍 Buscar por Nome ou Matrícula</label>
@@ -212,8 +226,15 @@
   var todosCartoes = [];
 
   document.addEventListener('DOMContentLoaded', function() {
+    // Carrega a URL mestre do Web App dinamicamente para aplicar nos menus
     google.script.run
       .withSuccessHandler(function(baseUrl) {
+        
+        // Amarra os botões do topo à URL ativa sem sofrer desvios
+        document.getElementById('lnkPainel').href = baseUrl + '?page=painel';
+        document.getElementById('lnkRelatorio').href = baseUrl + '?page=relatorio';
+        document.getElementById('lnkQrCode').href = baseUrl + '?page=qrcodes';
+
         google.script.run
           .withSuccessHandler(function(lista) {
             document.getElementById('loading').style.display = 'none';
@@ -238,13 +259,15 @@
       .getWebAppUrl();
   });
 
+  // SUA FUNÇÃO ORIGINAL DE RENDERIZAR OS CRÁCHÁS DO SEU LAYOUT FAVORITO
   function renderizarCartoes(lista, baseUrl) {
     var grid = document.getElementById('grid');
     var html = '';
 
     for (var i = 0; i < lista.length; i++) {
       var f = lista[i];
-      var qrData = baseUrl + '?m=' + encodeURIComponent(f.matricula);
+      // ATENÇÃO: Injeta o parâmetro do balcão para quando a câmera do celular ler o crachá físico!
+      var qrData = baseUrl + '?atendente=true&m=' + encodeURIComponent(f.matricula);
       var qrImgUrl = 'https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=' + encodeURIComponent(qrData);
 
       html += ''
@@ -268,7 +291,6 @@
     grid.innerHTML = html;
   }
 
-  // FILTRAR CARTÕES
   function filtrarCartoes() {
     var busca = document.getElementById('campoBusca').value.toLowerCase().trim();
     var cartoes = document.querySelectorAll('.cartao');
@@ -285,24 +307,20 @@
     });
   }
 
-  // LIMPAR BUSCA
   function limparBusca() {
     document.getElementById('campoBusca').value = '';
     filtrarCartoes();
   }
 
-  // IMPRIMIR TODOS
   function imprimirTodos() {
     var cartoes = document.querySelectorAll('.cartao');
     cartoes.forEach(function(c) { c.classList.remove('esconder-print'); });
     window.print();
   }
 
-  // IMPRIMIR INDIVIDUAL
   function imprimirIndividual(matricula) {
     var cartoes = document.querySelectorAll('.cartao');
 
-    // Esconde todos exceto o selecionado
     cartoes.forEach(function(c) {
       if (c.getAttribute('data-mat') === matricula) {
         c.classList.remove('esconder-print');
@@ -313,12 +331,10 @@
 
     window.print();
 
-    // Depois de imprimir, mostra todos novamente
     setTimeout(function() {
       cartoes.forEach(function(c) { c.classList.remove('esconder-print'); });
     }, 1000);
   }
 </script>
-
 </body>
 </html>

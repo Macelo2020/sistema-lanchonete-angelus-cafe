@@ -2,619 +2,356 @@
 <html>
 <head>
   <base target="_top">
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <style>
     * { margin:0; padding:0; box-sizing:border-box; }
-    body {
-      font-family:'Segoe UI',Tahoma,Geneva,Verdana,sans-serif;
-      background:#f0f2f5; min-height:100vh; padding:15px;
+    body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background:#f4f6f9; padding:20px; color:#333; }
+    .container { max-width:1000px; margin:0 auto; background:#fff; border-radius:16px; padding:30px; box-shadow:0 4px 30px rgba(0,0,0,0.05); }
+    
+    /* BANNER DE NOTIFICAÇÃO SUPERIOR VISUAL */
+    .alerta-sucesso {
+      display: none;
+      background-color: #e8f5e9;
+      color: #2e7d32;
+      border: 1px solid #c8e6c9;
+      padding: 12px 20px;
+      border-radius: 8px;
+      margin-bottom: 20px;
+      font-size: 14px;
+      font-weight: 600;
+      text-align: center;
+      animation: fade 0.3s ease;
     }
-    .topo {
-      background:linear-gradient(135deg,#667eea,#764ba2);
-      color:#fff; padding:20px 25px; border-radius:16px;
-      max-width:1000px; margin:0 auto 20px;
-      display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:10px;
+
+    /* TOPO CORPORATIVO PREMIUM BLUE FROG SOLUTIONS */
+    .header-relatorio {
+      background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+      padding: 20px 30px; border-radius:12px; color:#fff;
+      display:flex; justify-content:space-between; align-items:center; margin-bottom:20px;
     }
-    .topo h1 { font-size:20px; }
-    .topo p { font-size:13px; opacity:.9; }
-    .topo .nav a {
-      color:#fff; text-decoration:none; background:rgba(255,255,255,.2);
-      padding:8px 16px; border-radius:8px; font-size:13px; font-weight:600;
-      margin-left:8px; transition:background .3s;
+    .header-relatorio h2 { font-size:22px; font-weight: 700; margin:0; }
+    .header-relatorio p { font-size:13px; opacity:0.8; margin-top:4px; }
+    .menu-botoes { display: flex; gap: 10px; }
+    .btn-menu {
+      background: rgba(255,255,255,0.15); color: #fff; padding: 10px 18px;
+      border: none; border-radius: 8px; font-size: 13px; font-weight: 600;
+      cursor: pointer; text-decoration: none; transition: all 0.3s;
     }
-    .topo .nav a:hover { background:rgba(255,255,255,.35); }
-    .container { max-width:1000px; margin:0 auto; }
-    .abas {
-      display:flex; gap:0; margin-bottom:20px;
-      background:#fff; border-radius:14px; overflow:hidden;
-      box-shadow:0 2px 10px rgba(0,0,0,.08);
-    }
-    .aba {
-      flex:1; padding:14px; text-align:center; cursor:pointer;
-      font-size:14px; font-weight:700; color:#888; transition:all .3s;
-      border-bottom:3px solid transparent;
-    }
-    .aba:hover { background:#f5f5f5; }
-    .aba.ativa { color:#667eea; border-bottom-color:#667eea; background:#f8f9ff; }
-    .painel { display:none; }
-    .painel.visivel { display:block; }
-    .card-box {
-      background:#fff; border-radius:14px; padding:25px;
-      box-shadow:0 2px 10px rgba(0,0,0,.08); margin-bottom:20px;
-    }
-    .card-box h3 { color:#333; font-size:16px; margin-bottom:18px; }
-    .filtros {
-      display:flex; gap:12px; flex-wrap:wrap; align-items:flex-end;
-      margin-bottom:18px;
-    }
-    .filtros .campo { flex:1; min-width:120px; }
-    .filtros label {
-      display:block; font-size:11px; font-weight:700; color:#555;
-      text-transform:uppercase; margin-bottom:4px;
-    }
-    .filtros select, .filtros input {
-      width:100%; padding:10px 12px; border:2px solid #e0e0e0;
-      border-radius:10px; font-size:14px; outline:none;
-    }
-    .filtros select:focus, .filtros input:focus { border-color:#667eea; }
-    .btn {
-      padding:11px 22px; border:none; border-radius:10px;
-      font-size:13px; font-weight:700; cursor:pointer; transition:all .3s;
-      white-space:nowrap; display:inline-block; text-align:center;
-    }
-    .btn:disabled { opacity:.5; cursor:not-allowed; }
-    .btn-primary { background:linear-gradient(135deg,#667eea,#764ba2); color:#fff; }
-    .btn-primary:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(102,126,234,.4); }
-    .btn-green { background:linear-gradient(135deg,#43a047,#66bb6a); color:#fff; }
-    .btn-green:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(67,160,71,.4); }
-    .btn-dark { background:linear-gradient(135deg,#444,#777); color:#fff; }
-    .btn-dark:hover:not(:disabled) { transform:translateY(-2px); }
-    .btn-email { background:linear-gradient(135deg,#1976d2,#42a5f5); color:#fff; }
-    .btn-email:hover:not(:disabled) { transform:translateY(-2px); box-shadow:0 5px 15px rgba(25,118,210,.4); }
-    .btn-wpp { background:linear-gradient(135deg,#25d366,#128c7e); color:#fff; text-decoration:none; }
-    .btn-wpp:hover { transform:translateY(-2px); }
-    .btns-group { display:flex; gap:10px; flex-wrap:wrap; margin-top:15px; }
-    .msg {
-      padding:12px 16px; border-radius:10px; margin-bottom:18px;
-      font-size:14px; font-weight:500; text-align:center; display:none;
-    }
-    .msg.erro { display:block; background:#ffebee; color:#c62828; border:1px solid #ef9a9a; }
-    .msg.ok { display:block; background:#e8f5e9; color:#2e7d32; border:1px solid #a5d6a7; }
-    .msg.info { display:block; background:#e3f2fd; color:#1565c0; border:1px solid #90caf9; }
-    .resumo {
-      display:grid; grid-template-columns:repeat(auto-fit,minmax(180px,1fr));
-      gap:12px; margin-bottom:20px;
-    }
-    .card-stat { padding:18px; border-radius:12px; text-align:center; }
-    .card-stat .num { font-size:26px; font-weight:bold; }
-    .card-stat .lbl { font-size:11px; color:#666; margin-top:3px; }
-    .bg-blue { background:#e3f2fd; }
-    .bg-blue .num { color:#1565c0; }
-    .bg-green { background:#e8f5e9; }
-    .bg-green .num { color:#2e7d32; }
-    .bg-orange { background:#fff3e0; }
-    .bg-orange .num { color:#e65100; }
-    .tabela-wrap { overflow-x:auto; }
+    .btn-menu:hover { background: rgba(255,255,255,0.3); }
+    .btn-menu.ativo { background: #fff; color: #764ba2; box-shadow: 0 2px 8px rgba(0,0,0,0.15); }
+
+    /* SUB-ABAS MENSAL / INDIVIDUAL EM COMPONENTES BRANCOS */
+    .abas-container { display:flex; border-bottom:2px solid #e2e8f0; margin-bottom:25px; background:#f8fafc; border-radius:8px; padding:6px; gap:5px; }
+    .aba-item { flex:1; text-align:center; padding:12px; font-size:14px; font-weight:700; color:#64748b; cursor:pointer; border-radius:6px; transition:0.3s; }
+    .aba-item.ativa { background:#fff; color:#667eea; box-shadow:0 2px 8px rgba(0,0,0,0.05); }
+
+    /* FILTROS EXATOS HORIZONTAIS LADO A LADO APPROVED */
+    .painel-filtro { background:#fff; border:1px solid #e2e8f0; border-radius:12px; padding:20px; margin-bottom:25px; display:none; }
+    .painel-filtro.visivel { display:block; animation:fade 0.3s ease; }
+    .titulo-secao-busca { font-size: 14px; font-weight: 700; color: #333; margin-bottom: 15px; display: flex; align-items: center; gap: 6px; }
+    
+    .grid-filtros { display:flex; flex-direction: row; gap:15px; align-items:flex-end; flex-wrap: nowrap; }
+    .form-group { display:flex; flex-direction:column; gap:6px; }
+    .form-group.flex-grow { flex: 2; min-width: 150px; }
+    .form-group.flex-base { flex: 1; min-width: 100px; }
+    
+    .form-group label { font-size:11px; font-weight:700; color:#64748b; text-transform:uppercase; letter-spacing: 0.5px; }
+    .form-group select, .form-group input { padding:11px 14px; border:2px solid #e0e0e0; border-radius:10px; font-size:14px; background:#fff; width:100%; outline:none; transition: border-color 0.3s; }
+    .form-group select:focus, .form-group input:focus { border-color: #667eea; }
+    
+    .btn-acao { padding:12px 22px; border:none; border-radius:10px; font-size:14px; font-weight:700; cursor:pointer; color:#fff; transition:0.3s; display: inline-flex; align-items: center; gap: 5px; height: 43px; justify-content: center; }
+    .btn-gerar { background: linear-gradient(135deg, #667eea, #764ba2); }
+    .btn-gerar:hover { transform: translateY(-2px); box-shadow: 0 4px 12px rgba(102,126,234,0.3); }
+
+    /* CARDS DE RESUMO */
+    .resumo-relatorio { display:none; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 25px; }
+    .card-r { background:#f8fafc; border:1px solid #e2e8f0; padding:20px; border-radius:12px; text-align:center; }
+    .card-r .val { font-size:26px; font-weight:700; color:#333; }
+    .card-r .lbl { font-size:11px; color:#94a3b8; font-weight:700; text-transform:uppercase; }
+    .card-r.money .val { color:#2e7d32; font-size:28px; }
+
+    /* BOX TABELAS DINÂMICAS DESIGN PREMIUM */
+    .box-resultado { display:none; border:1px solid #e2e8f0; border-radius:12px; overflow:hidden; margin-bottom:25px; }
+    .topo-tabela { background:#f8fafc; padding:15px 20px; border-bottom:1px solid #e2e8f0; font-size:14px; font-weight:700; color:#475569; }
     table { width:100%; border-collapse:collapse; }
-    thead tr { background:#667eea; color:#fff; }
-    th { padding:11px 10px; text-align:left; font-size:12px; font-weight:700; text-transform:uppercase; }
-    td { padding:10px; font-size:13px; border-bottom:1px solid #f0f0f0; }
-    tr:nth-child(even) { background:#fafafa; }
-    tr:hover { background:#f0f4ff; }
-    tfoot tr { background:#667eea; color:#fff; font-weight:700; }
-    tfoot td { padding:12px 10px; border:none; font-size:13px; }
-    .ficha {
-      background:#f8faf8; border:2px solid #c8e6c9;
-      border-radius:14px; padding:20px; margin:15px 0; display:none;
-    }
-    .ficha.visivel { display:block; }
-    .ficha h4 { color:#2e7d32; margin-bottom:12px; font-size:15px; }
-    .ficha .info-row { display:flex; gap:20px; flex-wrap:wrap; margin-bottom:12px; }
-    .ficha .info-item { font-size:13px; }
-    .ficha .info-item strong { color:#333; }
-    .ficha .total-big {
-      font-size:28px; font-weight:bold; color:#2e7d32;
-      text-align:center; margin:15px 0;
-    }
-    .loading {
-      display:inline-block; width:16px; height:16px;
-      border:3px solid rgba(255,255,255,.3); border-radius:50%;
-      border-top-color:#fff; animation:spin .8s linear infinite;
-      vertical-align:middle; margin-right:6px;
-    }
-    @keyframes spin { to{transform:rotate(360deg);} }
+    th { background:#667eea; color:#fff; font-weight:600; text-transform:uppercase; font-size:11px; padding:12px 15px; text-align:left; }
+    td { padding:12px 15px; border-bottom:1px solid #f1f5f9; font-size:13.5px; }
+    tr:hover td { background:#f8fafc; }
+
+    /* SEÇÃO DE BOTÕES INFERIORES LIMPA */
+    .botoes-rodape { display:none; gap:12px; margin-top:20px; flex-wrap: wrap; }
+    .btn-print { background:#475569; width: 100%; } .btn-print:hover { background:#334155; }
+    
+    .loading { text-align:center; padding:30px; color:#94a3b8; font-size:14px; }
+    @keyframes fade { from { opacity:0; transform:translateY(-5px); } to { opacity:1; transform:translateY(0); } }
+    
     @media print {
-      body { background:#fff !important; padding:0 !important; }
-      .topo, .abas, .filtros, .btns-group, .btn, .nav { display:none !important; }
-      .container { max-width:100%; }
-      .card-box { box-shadow:none; border:1px solid #ddd; padding:15px; }
-      .print-header { display:block !important; text-align:center; margin-bottom:20px; padding-bottom:15px; border-bottom:2px solid #333; }
-      .print-header h2 { font-size:20px; color:#333; }
-      .print-header p { font-size:12px; color:#666; margin-top:4px; }
-      table { font-size:11px; }
-      th { background:#333 !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-      tfoot tr { background:#333 !important; color:#fff !important; -webkit-print-color-adjust:exact; print-color-adjust:exact; }
-    }
-    .print-header { display:none; }
-    @media (max-width:600px) {
-      .topo { flex-direction:column; text-align:center; }
-      .filtros { flex-direction:column; }
-      .ficha .info-row { flex-direction:column; gap:5px; }
+      body { background:#fff; padding:0; }
+      .container { box-shadow:none; padding:0; border:none; }
+      .header-relatorio, .abas-container, .painel-filtro, .botoes-rodape, .resumo-relatorio { display:none !important; }
+      .box-resultado { border:none; overflow:visible; }
+      .topo-tabela { background:none; padding:0 0 10px 0; font-size:16px; border-bottom:2px solid #333; color:#000; }
+      th { background:#e2e8f0 !important; color:#000 !important; font-weight:700; border-bottom:1px solid #000; }
+      td { border-bottom:1px solid #ddd; color:#000 !important; }
     }
   </style>
 </head>
 <body>
 
-<!-- TOPO -->
-<div class="topo">
-  <div>
-    <h1>📋 Relatório & Extrato - Lanchonete Angelus</h1>
-    <p>Relatório mensal para impressão e extrato individual</p>
-  </div>
-  <div class="nav">
-    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=painel" target="_top">📊 Painel Diário</a>
-    <a href="https://script.google.com/a/macros/iwgp.com.br/s/AKfycbxpN8SeUjk87hcFGYufbenckoisRqW1Txw5hORJUbOjc01bQb_f_ibKEJ80-SMaOxb0CQ/exec?page=qrcodes" target="_top">📱 QR Codes</a>
-  </div>
-</div>
-
 <div class="container">
+  
+  <div id="alertaStatus" class="alerta-sucesso"></div>
 
-  <!-- ABAS -->
-  <div class="abas" id="abas">
-    <div class="aba ativa" data-aba="geral">📊 Relatório Mensal</div>
-    <div class="aba" data-aba="individual">👤 Extrato Individual</div>
-  </div>
-
-  <!-- MENSAGEM -->
-  <div id="msg" class="msg"></div>
-
-  <!-- ============================== -->
-  <!-- ABA 1: RELATÓRIO MENSAL        -->
-  <!-- ============================== -->
-  <div id="painelGeral" class="painel visivel">
-
-    <div class="print-header" id="printHeaderGeral">
-      <h2>🍔 Lanchonete Angelus - Relatório Mensal</h2>
-      <p id="printPeriodoGeral"></p>
+  <div class="header-relatorio">
+    <div>
+      <h2>📋 Relatório & Extrato - Lanchonete Angelus</h2>
+      <p>Gerencie despesas consolidadas e individuais</p>
     </div>
-
-    <div class="card-box">
-      <h3>📅 Selecione o Período</h3>
-      <div class="filtros">
-        <div class="campo">
-          <label>Mês</label>
-          <select id="selMes">
-            <option value="1">Janeiro</option>
-            <option value="2">Fevereiro</option>
-            <option value="3">Março</option>
-            <option value="4">Abril</option>
-            <option value="5">Maio</option>
-            <option value="6">Junho</option>
-            <option value="7">Julho</option>
-            <option value="8">Agosto</option>
-            <option value="9">Setembro</option>
-            <option value="10">Outubro</option>
-            <option value="11">Novembro</option>
-            <option value="12">Dezembro</option>
-          </select>
-        </div>
-        <div class="campo">
-          <label>Ano</label>
-          <select id="selAno"></select>
-        </div>
-        <div class="campo">
-          <label>E-mail do RH (opcional)</label>
-          <input type="email" id="emailRH" placeholder="rh@hospital.com">
-        </div>
-        <div>
-          <button class="btn btn-primary" id="btnGerar">📊 Gerar Relatório</button>
-        </div>
-      </div>
-    </div>
-
-    <!-- RESULTADO -->
-    <div id="resultadoGeral" style="display:none;">
-      <div class="resumo">
-        <div class="card-stat bg-blue">
-          <div class="num" id="totalFunc">0</div>
-          <div class="lbl">Funcionários</div>
-        </div>
-        <div class="card-stat bg-orange">
-          <div class="num" id="totalCompras">0</div>
-          <div class="lbl">Total de Compras</div>
-        </div>
-        <div class="card-stat bg-green">
-          <div class="num" id="totalGeral">R$ 0,00</div>
-          <div class="lbl">Valor Total</div>
-        </div>
-      </div>
-
-      <div class="card-box">
-        <div class="tabela-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Matrícula</th>
-                <th>Nome</th>
-                <th>Setor</th>
-                <th>Qtd</th>
-                <th>Total</th>
-              </tr>
-            </thead>
-            <tbody id="tabelaBody"></tbody>
-            <tfoot id="tabelaFoot"></tfoot>
-          </table>
-        </div>
-
-        <div class="btns-group">
-          <button class="btn btn-green" id="btnEnviarRH">📧 Enviar Relatório por E-mail ao RH</button>
-          <button class="btn btn-dark" onclick="window.print()">🖨️ Imprimir Relatório</button>
-        </div>
-      </div>
+    <div class="menu-botoes">
+      <a href="#" id="lnkPainel" class="btn-menu">📊 Painel Diário</a>
+      <a href="#" id="lnkRelatorio" class="btn-menu ativo">📋 Relatório Mensal</a>
+      <a href="#" id="lnkQrCode" class="btn-menu">📱 QR Codes</a>
     </div>
   </div>
 
-  <!-- ============================== -->
-  <!-- ABA 2: EXTRATO INDIVIDUAL      -->
-  <!-- ============================== -->
-  <div id="painelIndividual" class="painel">
+  <div class="abas-container">
+    <div class="aba-item ativa" id="tabResumo" onclick="mudarAba('mensal')">📊 Relatório Mensal Geral</div>
+    <div class="aba-item" id="tabIndiv" onclick="mudarAba('individual')">👤 Extrato Individual</div>
+  </div>
 
-    <div class="print-header" id="printHeaderInd">
-      <h2>🍔 Lanchonete Angelus - Extrato Individual</h2>
-      <p id="printPeriodoInd"></p>
-    </div>
-
-    <div class="card-box">
-      <h3>👤 Buscar Extrato do Funcionário</h3>
-      <div class="filtros">
-        <div class="campo">
-          <label>Matrícula</label>
-          <input type="text" id="matIndividual" placeholder="Ex: 1001" inputmode="numeric">
-        </div>
-        <div class="campo">
-          <label>Mês</label>
-          <select id="selMesInd">
-            <option value="1">Janeiro</option>
-            <option value="2">Fevereiro</option>
-            <option value="3">Março</option>
-            <option value="4">Abril</option>
-            <option value="5">Maio</option>
-            <option value="6">Junho</option>
-            <option value="7">Julho</option>
-            <option value="8">Agosto</option>
-            <option value="9">Setembro</option>
-            <option value="10">Outubro</option>
-            <option value="11">Novembro</option>
-            <option value="12">Dezembro</option>
-          </select>
-        </div>
-        <div class="campo">
-          <label>Ano</label>
-          <select id="selAnoInd"></select>
-        </div>
-        <div>
-          <button class="btn btn-primary" id="btnBuscarInd">🔍 Buscar Extrato</button>
-        </div>
+  <div id="painelMensal" class="painel-filtro visivel">
+    <div class="titulo-secao-busca">📅 Selecione o Período e Formato para o Fechamento Geral</div>
+    <div class="grid-filtros">
+      <div class="form-group flex-grow"><label>Mês</label><select id="m_mes"></select></div>
+      <div class="form-group flex-grow"><label>Ano</label><select id="m_ano"></select></div>
+      <div class="form-group flex-grow">
+        <label>Formato de Visualização</label>
+        <select id="m_formato">
+          <option value="sintetico" selected>📊 Sintético (Direto para Folha)</option>
+          <option value="detalhado">📋 Detalhado (Com Setor e Qtd)</option>
+        </select>
       </div>
-    </div>
-
-    <!-- FICHA DO FUNCIONÁRIO -->
-    <div id="fichaInd" class="ficha">
-      <h4 id="fichaTitle">📋 Extrato do Funcionário</h4>
-      <div class="info-row">
-        <div class="info-item"><strong>Nome:</strong> <span id="fichaNome"></span></div>
-        <div class="info-item"><strong>Matrícula:</strong> <span id="fichaMat"></span></div>
-        <div class="info-item"><strong>Setor:</strong> <span id="fichaSetor"></span></div>
-      </div>
-      <div class="total-big" id="fichaTotal">R$ 0,00</div>
-
-      <div class="card-box" style="margin-top:10px;">
-        <div class="tabela-wrap">
-          <table>
-            <thead>
-              <tr>
-                <th>#</th>
-                <th>Data</th>
-                <th>Hora</th>
-                <th>Valor</th>
-                <th>Protocolo</th>
-              </tr>
-            </thead>
-            <tbody id="tabelaIndBody"></tbody>
-          </table>
-        </div>
-      </div>
-
-      <div class="btns-group">
-        <button class="btn btn-email" id="btnEnviarExtrato">📧 Enviar Extrato por E-mail</button>
-        <a class="btn btn-wpp" id="btnWppExtrato" href="#" target="_blank">📱 Enviar por WhatsApp</a>
-        <button class="btn btn-dark" onclick="window.print()">🖨️ Imprimir Extrato</button>
-      </div>
+      <button class="btn-acao btn-gerar" onclick="gerarRelatorioMensalGeral()">📊 Gerar Relatório</button>
     </div>
   </div>
 
+  <div id="painelIndividual" class="painel-filtro">
+    <div class="titulo-secao-busca">👤 Localizar Consumos do Funcionário</div>
+    <div class="grid-filtros">
+      <div class="form-group flex-base"><label>Matrícula</label><input type="text" id="i_matricula_input" placeholder="Cód..." oninput="sincronizarInputParaSelect()"></div>
+      <div class="form-group flex-grow"><label>Ou Selecione pelo Nome</label><select id="i_funcionario" onchange="sincronizarSelectParaInput()"><option value="">Carregando...</option></select></div>
+      <div class="form-group flex-base"><label>Mês</label><select id="i_mes"></select></div>
+      <div class="form-group flex-base"><label>Ano</label><select id="i_ano"></select></div>
+      <button class="btn-acao btn-gerar" onclick="gerarExtratoIndividual()">🔍 Buscar Extrato</button>
+    </div>
+  </div>
+
+  <div class="resumo-relatorio" id="blocoCards">
+    <div class="card-r"><div class="val" id="resCard1">0</div><div class="lbl" id="lblCard1">Colaboradores</div></div>
+    <div class="card-r"><div class="val" id="resCard2">0</div><div class="lbl" id="lblCard2">Pedidos</div></div>
+    <div class="card-r money"><div class="val" id="resCard3">R$ 0,00</div><div class="lbl">Total do Mês</div></div>
+  </div>
+
+  <div class="box-resultado" id="blocoTabela">
+    <div class="topo-tabela" id="titTabelaResult">📋 Detalhamento dos Registros</div>
+    <div id="areaTabelaDinamica"></div>
+  </div>
+
+  <div class="botoes-rodape" id="blocoBotoes">
+    <button class="btn-acao btn-print" onclick="window.print()">🖨️ Imprimir Relatório / Extrato</button>
+  </div>
 </div>
 
 <script>
-document.addEventListener('DOMContentLoaded', function() {
+  var modoAtivo = 'mensal';
+  var mapaListaGlobal = [];
 
-  // ====== PREENCHE ANOS ======
-  var anoAtual = new Date().getFullYear();
-  var mesAtual = new Date().getMonth() + 1;
-  var selAno = document.getElementById('selAno');
-  var selAnoInd = document.getElementById('selAnoInd');
+  document.addEventListener('DOMContentLoaded', function() {
+    configurarDatas();
+    google.script.run.withSuccessHandler(function(url) {
+      document.getElementById('lnkPainel').href = url + '?page=painel';
+      document.getElementById('lnkRelatorio').href = url + '?page=relatorio';
+      document.getElementById('lnkQrCode').href = url + '?page=qrcodes';
+      carregarFuncionarios();
+    }).getWebAppUrl();
+  });
 
-  for (var a = anoAtual; a >= anoAtual - 3; a--) {
-    var opt1 = document.createElement('option');
-    opt1.value = a; opt1.textContent = a;
-    selAno.appendChild(opt1);
-    var opt2 = document.createElement('option');
-    opt2.value = a; opt2.textContent = a;
-    selAnoInd.appendChild(opt2);
-  }
-
-  document.getElementById('selMes').value = mesAtual;
-  document.getElementById('selMesInd').value = mesAtual;
-
-  // ====== ABAS ======
-  var abas = document.querySelectorAll('#abas .aba');
-  abas.forEach(function(aba) {
-    aba.addEventListener('click', function() {
-      abas.forEach(function(a) { a.classList.remove('ativa'); });
-      aba.classList.add('ativa');
-
-      var tipo = aba.getAttribute('data-aba');
-      document.getElementById('painelGeral').classList.remove('visivel');
-      document.getElementById('painelIndividual').classList.remove('visivel');
-      esconderMsg();
-
-      if (tipo === 'geral') {
-        document.getElementById('painelGeral').classList.add('visivel');
-      } else {
-        document.getElementById('painelIndividual').classList.add('visivel');
-      }
+  function configurarDatas() {
+    var meses = ["Janeiro","Fevereiro","Março","Abril","Maio","Junho","Julho","Agosto","Setembro","Outubro","Novembro","Dezembro"];
+    var d = new Date();
+    [document.getElementById('m_mes'), document.getElementById('i_mes')].forEach(sel => {
+      meses.forEach((m, i) => { var o = document.createElement('option'); o.value=i+1; o.textContent=m; if(i===d.getMonth()) o.selected=true; sel.appendChild(o); });
     });
-  });
+    [document.getElementById('m_ano'), document.getElementById('i_ano')].forEach(sel => {
+      for(var a=d.getFullYear(); a>=d.getFullYear()-1; a--) { var o = document.createElement('option'); o.value=a; o.textContent=a; sel.appendChild(o); }
+    });
+  }
 
-  // ====== BOTÃO GERAR RELATÓRIO ======
-  document.getElementById('btnGerar').addEventListener('click', function() {
-    var mes = document.getElementById('selMes').value;
-    var ano = document.getElementById('selAno').value;
-    var btn = this;
+  function mudarAba(aba) {
+    modoAtivo = aba;
+    document.getElementById('tabResumo').className = 'aba-item' + (aba==='mensal'?' ativa':'');
+    document.getElementById('tabIndiv').className = 'aba-item' + (aba==='individual'?' ativa':'');
+    document.getElementById('painelMensal').className = 'painel-filtro' + (aba==='mensal'?' visivel':'');
+    document.getElementById('painelIndividual').className = 'painel-filtro' + (aba==='individual'?' visivel':'');
+    
+    document.getElementById('blocoCards').style.display = 'none';
+    document.getElementById('blocoTabela').style.display = 'none';
+    document.getElementById('blocoBotoes').style.display = 'none';
+  }
 
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> Gerando...';
-    esconderMsg();
-    document.getElementById('resultadoGeral').style.display = 'none';
+  function carregarFuncionarios() {
+    google.script.run.withSuccessHandler(function(l) {
+      var s = document.getElementById('i_funcionario'); 
+      s.innerHTML = '<option value="">-- Escolha pelo Nome --</option>';
+      if(l) {
+        mapaListaGlobal = l;
+        l.sort((a,b) => a.nome.localeCompare(b.nome));
+        l.forEach(f => { var o = document.createElement('option'); o.value=f.matricula; o.textContent=f.nome; s.appendChild(o); });
+      }
+    }).buscarTodosFuncionarios();
+  }
 
-    google.script.run
-      .withSuccessHandler(function(r) {
-        btn.disabled = false;
-        btn.innerHTML = '📊 Gerar Relatório';
-
-        if (r.sucesso) {
-          exibirRelatorio(r);
-        } else {
-          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao gerar'), 'erro');
-        }
-      })
-      .withFailureHandler(function(err) {
-        btn.disabled = false;
-        btn.innerHTML = '📊 Gerar Relatório';
-        mostrarMsg('❌ Erro: ' + err.message, 'erro');
-      })
-      .gerarRelatorioMensal(mes, ano);
-  });
-
-  // ====== BOTÃO ENVIAR RELATÓRIO POR E-MAIL ======
-  document.getElementById('btnEnviarRH').addEventListener('click', function() {
-    var email = document.getElementById('emailRH').value.trim();
-    if (!email || email.indexOf('@') === -1) {
-      mostrarMsg('Preencha o e-mail do RH no campo acima.', 'erro');
-      return;
+  function sincronizarInputParaSelect() {
+    var inp = document.getElementById('i_matricula_input').value.trim();
+    var sel = document.getElementById('i_funcionario');
+    if(inp === "") { sel.value = ""; return; }
+    
+    var achou = false;
+    for(var i=0; i<sel.options.length; i++) {
+      if(sel.options[i].value === inp) {
+        sel.selectedIndex = i;
+        achou = true;
+        break;
+      }
     }
-    var mes = document.getElementById('selMes').value;
-    var ano = document.getElementById('selAno').value;
-    var btn = this;
+    if(!achou) sel.value = "";
+  }
 
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> Enviando...';
+  function sincronizarSelectParaInput() {
+    var sel = document.getElementById('i_funcionario').value;
+    document.getElementById('i_matricula_input').value = sel;
+  }
 
-    google.script.run
-      .withSuccessHandler(function(r) {
-        btn.disabled = false;
-        btn.innerHTML = '📧 Enviar Relatório por E-mail ao RH';
-        if (r.sucesso) {
-          mostrarMsg('🎉 ' + r.mensagem, 'ok');
+  // CHAMADAS INTEGRADAS À SINTETIZADOR DA JOSY DO RH
+  function gerarRelatorioMensalGeral() {
+    var mes = document.getElementById('m_mes').value;
+    var ano = document.getElementById('m_ano').value;
+    var formato = document.getElementById('m_formato').value;
+    var area = document.getElementById('areaTabelaDinamica');
+    
+    document.getElementById('blocoTabela').style.display = 'block';
+    area.innerHTML = '<div class="loading">⏳ Processando despesas e estruturando formato solicitado...</div>';
+
+    // ROTEAMENTO DE VISUALIZAÇÃO INTERNO (SINTÉTICO VS DETALHADO)
+    if (formato === "sintetico") {
+      google.script.run.withSuccessHandler(function(r) {
+        if(r.sucesso && r.dados.length > 0) {
+          // Cards estatísticos superiores continuam alimentados
+          document.getElementById('resCard1').textContent = r.totalFuncionarios;
+          document.getElementById('lblCard1').textContent = "Funcionários Ativos";
+          
+          var totalCompras = 0;
+          for (var i = 0; i < r.dados.length; i++) { totalCompras += r.dados[i].qtd; }
+          document.getElementById('resCard2').textContent = totalCompras;
+          document.getElementById('lblCard2').textContent = "Total de Pedidos";
+          
+          document.getElementById('resCard3').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
+          document.getElementById('blocoCards').style.display = 'grid';
+          
+          // Título alterado conforme especificação para o RH
+          document.getElementById('titTabelaResult').innerHTML = '📊 <strong>Relatório Mensal Sintético (Folha de Pagamento)</strong> - Referência: ' + mes + '/' + ano;
+
+          // CONSTRUÇÃO DA TABELA ULTRA CLEAN REQUISITADA PELA JOSY
+          var html = '<table><thead><tr><th style="width: 50%;">Funcionário</th><th style="text-align:center; width: 25%;">Matrícula</th><th style="text-align:right; width: 25%;">Valor R$</th></tr></thead><tbody>';
+          
+          // Regra do Backend já entrega em ordem alfabética de A-Z
+          for (var i = 0; i < r.dados.length; i++) {
+            var f = r.dados[i];
+            html += '<tr><td><strong>' + f.nome + '</strong></td><td style="text-align:center; color:#475569;">' + f.matricula + '</td><td style="text-align:right; font-weight:700; color:#1e1e1e;">R$ ' + f.total.toFixed(2).replace('.',',') + '</td></tr>';
+          }
+          
+          // Linha de Divisória e Fechamento Totalizador Geral da Folha
+          html += '<tr style="background:#f8fafc; border-top:2px solid #334155; font-weight:800;"><td style="font-size:14px; text-transform:uppercase;">TOTAL</td><td style="text-align:center; color:#64748b; font-size:12px;">' + r.totalFuncionarios + ' Colab.</td><td style="text-align:right; font-size:16px; color:#b91c1c;">R$ ' + r.totalGeral.toFixed(2).replace('.',',') + '</td></tr>';
+          html += '</tbody></table>';
+          
+          area.innerHTML = html;
+          document.getElementById('blocoBotoes').style.display = 'flex';
         } else {
-          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao enviar'), 'erro');
+          area.innerHTML = '<div class="loading">Nenhum dado encontrado na base de dados para o período selecionado.</div>';
         }
-      })
-      .withFailureHandler(function(err) {
-        btn.disabled = false;
-        btn.innerHTML = '📧 Enviar Relatório por E-mail ao RH';
-        mostrarMsg('❌ Erro: ' + err.message, 'erro');
-      })
-      .enviarRelatorioParaRH(mes, ano, email);
-  });
+      }).gerarRelatorioMensal(mes, ano);
+      
+    } else {
+      // VISUALIZAÇÃO DETALHADA ANTIGA CASO O RH QUEIRA AUDITAR DETALHES DE SETORES
+      google.script.run.withSuccessHandler(function(r) {
+        if(r.sucesso && r.dados.length > 0) {
+          document.getElementById('resCard1').textContent = r.totalFuncionarios;
+          document.getElementById('lblCard1').textContent = "Funcionários Ativos";
+          
+          var totalCompras = 0;
+          for (var i = 0; i < r.dados.length; i++) { totalCompras += r.dados[i].qtd; }
+          document.getElementById('resCard2').textContent = totalCompras;
+          document.getElementById('lblCard2').textContent = "Total de Pedidos";
+          
+          document.getElementById('resCard3').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
+          document.getElementById('blocoCards').style.display = 'grid';
+          document.getElementById('titTabelaResult').innerHTML = '📋 Demonstrativo Consolidado Detalhado - Período: ' + mes + '/' + ano;
 
-  // ====== BOTÃO BUSCAR EXTRATO INDIVIDUAL ======
-  document.getElementById('btnBuscarInd').addEventListener('click', function() {
-    var mat = document.getElementById('matIndividual').value.trim();
-    var mes = document.getElementById('selMesInd').value;
-    var ano = document.getElementById('selAnoInd').value;
-
-    if (!mat) { mostrarMsg('Digite a matrícula.', 'erro'); return; }
-
-    var btn = this;
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> Buscando...';
-    esconderMsg();
-    document.getElementById('fichaInd').classList.remove('visivel');
-
-    google.script.run
-      .withSuccessHandler(function(r) {
-        btn.disabled = false;
-        btn.innerHTML = '🔍 Buscar Extrato';
-
-        if (r.sucesso) {
-          exibirExtrato(r);
+          var html = '<table><thead><tr><th>#</th><th>Matrícula</th><th>Nome</th><th>Setor</th><th style="text-align:center;">Qtd</th><th style="text-align:right;">Total</th></tr></thead><tbody>';
+          for (var i = 0; i < r.dados.length; i++) {
+            var f = r.dados[i];
+            html += '<tr><td>' + (i + 1) + '</td><td>' + f.matricula + '</td><td><strong>' + f.nome + '</strong></td><td>' + f.setor + '</td><td style="text-align:center;">' + f.qtd + '</td><td style="text-align:right; font-weight:700; color:#2e7d32;">R$ ' + f.total.toFixed(2).replace('.',',') + '</td></tr>';
+          }
+          html += '</tbody></table>';
+          area.innerHTML = html;
+          
+          document.getElementById('blocoBotoes').style.display = 'flex';
         } else {
-          mostrarMsg('❌ ' + (r.mensagem || 'Não encontrado'), 'erro');
+          area.innerHTML = '<div class="loading">Nenhum dado encontrado na base de dados para o período selecionado.</div>';
         }
-      })
-      .withFailureHandler(function(err) {
-        btn.disabled = false;
-        btn.innerHTML = '🔍 Buscar Extrato';
-        mostrarMsg('❌ Erro: ' + err.message, 'erro');
-      })
-      .buscarConsumoIndividual(mat, mes, ano);
-  });
-
-  // ====== BOTÃO ENVIAR EXTRATO POR E-MAIL ======
-  document.getElementById('btnEnviarExtrato').addEventListener('click', function() {
-    var mat = document.getElementById('matIndividual').value.trim();
-    var mes = document.getElementById('selMesInd').value;
-    var ano = document.getElementById('selAnoInd').value;
-    var btn = this;
-
-    btn.disabled = true;
-    btn.innerHTML = '<span class="loading"></span> Enviando...';
-
-    google.script.run
-      .withSuccessHandler(function(r) {
-        btn.disabled = false;
-        btn.innerHTML = '📧 Enviar Extrato por E-mail';
-        if (r.sucesso) {
-          mostrarMsg('🎉 ' + r.mensagem, 'ok');
-        } else {
-          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao enviar'), 'erro');
-        }
-      })
-      .withFailureHandler(function(err) {
-        btn.disabled = false;
-        btn.innerHTML = '📧 Enviar Extrato por E-mail';
-        mostrarMsg('❌ Erro: ' + err.message, 'erro');
-      })
-      .enviarExtratoIndividual(mat, mes, ano);
-  });
-
-  // ====== BOTÃO WHATSAPP EXTRATO ======
-  document.getElementById('btnWppExtrato').addEventListener('click', function(e) {
-    var mat = document.getElementById('matIndividual').value.trim();
-    var mes = document.getElementById('selMesInd').value;
-    var ano = document.getElementById('selAnoInd').value;
-
-    e.preventDefault();
-
-    google.script.run
-      .withSuccessHandler(function(r) {
-        if (r.sucesso && r.link) {
-          window.open(r.link, '_blank');
-        } else {
-          mostrarMsg('❌ ' + (r.mensagem || 'Erro ao gerar link'), 'erro');
-        }
-      })
-      .withFailureHandler(function(err) {
-        mostrarMsg('❌ Erro: ' + err.message, 'erro');
-      })
-      .gerarLinkWhatsappExtrato(mat, mes, ano);
-  });
-
-});
-
-// ====== EXIBIR RELATÓRIO MENSAL ======
-function exibirRelatorio(r) {
-  var meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-               'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-  document.getElementById('printPeriodoGeral').textContent = meses[parseInt(r.mes)] + ' / ' + r.ano;
-  document.getElementById('totalFunc').textContent = r.totalFuncionarios;
-  document.getElementById('totalGeral').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
-
-  var totalCompras = 0;
-  for (var i = 0; i < r.dados.length; i++) { totalCompras += r.dados[i].qtd; }
-  document.getElementById('totalCompras').textContent = totalCompras;
-
-  var tbody = document.getElementById('tabelaBody');
-  var html = '';
-
-  if (r.dados.length === 0) {
-    html = '<tr><td colspan="6" style="text-align:center;color:#888;padding:30px;">Nenhum registro encontrado.</td></tr>';
-  } else {
-    for (var i = 0; i < r.dados.length; i++) {
-      var f = r.dados[i];
-      html += '<tr>'
-        + '<td>' + (i + 1) + '</td>'
-        + '<td>' + f.matricula + '</td>'
-        + '<td><strong>' + f.nome + '</strong></td>'
-        + '<td>' + f.setor + '</td>'
-        + '<td style="text-align:center;">' + f.qtd + '</td>'
-        + '<td style="text-align:right;font-weight:bold;">R$ ' + f.total.toFixed(2).replace('.', ',') + '</td>'
-        + '</tr>';
+      }).gerarRelatorioMensal(mes, ano);
     }
   }
-  tbody.innerHTML = html;
 
-  var tfoot = document.getElementById('tabelaFoot');
-  tfoot.innerHTML = '<tr>'
-    + '<td colspan="4" style="text-align:left;">TOTAL GERAL</td>'
-    + '<td style="text-align:center;">' + totalCompras + '</td>'
-    + '<td style="text-align:right;">R$ ' + r.totalGeral.toFixed(2).replace('.', ',') + '</td>'
-    + '</tr>';
+  function gerarExtratoIndividual() {
+    var mat = document.getElementById('i_matricula_input').value.trim();
+    var mes = document.getElementById('i_mes').value;
+    var ano = document.getElementById('i_ano').value;
+    if(!mat) { alert('Informe uma matrícula ou escolha um colaborador na listagem lateral!'); return; }
+    
+    var area = document.getElementById('areaTabelaDinamica');
+    document.getElementById('blocoTabela').style.display = 'block';
+    area.innerHTML = '<div class="loading">⏳ Puxando histórico individual em tempo real...</div>';
 
-  document.getElementById('resultadoGeral').style.display = 'block';
-  mostrarMsg('✅ Relatório gerado com ' + r.totalFuncionarios + ' funcionário(s).', 'ok');
-}
+    google.script.run.withSuccessHandler(function(r) {
+      if(r.sucesso) {
+        document.getElementById('resCard1').textContent = r.funcionario.matricula;
+        document.getElementById('lblCard1').textContent = "Cód. Matrícula";
+        document.getElementById('resCard2').textContent = r.funcionario.setor;
+        document.getElementById('lblCard2').textContent = "Setor Cadastrado";
+        document.getElementById('resCard3').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
+        document.getElementById('blocoCards').style.display = 'grid';
+        document.getElementById('titTabelaResult').innerHTML = '📋 Consumos Detalhados de: <strong>' + r.funcionario.nome + '</strong>';
 
-// ====== EXIBIR EXTRATO INDIVIDUAL ======
-function exibirExtrato(r) {
-  var meses = ['','Janeiro','Fevereiro','Março','Abril','Maio','Junho',
-               'Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
-
-  var func = r.funcionario;
-  document.getElementById('fichaNome').textContent = func.nome;
-  document.getElementById('fichaMat').textContent = func.matricula;
-  document.getElementById('fichaSetor').textContent = func.setor;
-  document.getElementById('fichaTotal').textContent = 'R$ ' + r.totalGeral.toFixed(2).replace('.', ',');
-  document.getElementById('fichaTitle').textContent = '📋 Extrato de ' + func.nome + ' - ' + meses[parseInt(r.mes)] + '/' + r.ano;
-  document.getElementById('printPeriodoInd').textContent = func.nome + ' - ' + meses[parseInt(r.mes)] + '/' + r.ano;
-
-  var tbody = document.getElementById('tabelaIndBody');
-  var html = '';
-
-  if (r.registros.length === 0) {
-    html = '<tr><td colspan="5" style="text-align:center;color:#888;padding:20px;">Nenhum consumo neste período.</td></tr>';
-  } else {
-    for (var i = 0; i < r.registros.length; i++) {
-      var reg = r.registros[i];
-      html += '<tr>'
-        + '<td>' + (i + 1) + '</td>'
-        + '<td>' + reg.data + '</td>'
-        + '<td>' + reg.hora + '</td>'
-        + '<td style="font-weight:bold;">' + reg.valorFmt + '</td>'
-        + '<td style="font-size:11px;color:#aaa;">' + reg.protocolo + '</td>'
-        + '</tr>';
-    }
+        if(r.registros.length > 0) {
+          var html = '<table><thead><tr><th>#</th><th>Data da Compra</th><th>Horário</th><th>Valor Debitado</th><th>Nº Protocolo Único</th></tr></thead><tbody>';
+          for (var i = 0; i < r.registros.length; i++) {
+            var reg = r.registros[i];
+            html += '<tr><td>' + (i + 1) + '</td><td>'+reg.data+'</td><td>'+reg.hora+'</td><td style="color:#b91c1c; font-weight:700;">'+reg.valorFmt+'</td><td style="font-family:monospace; color:#64748b; font-size:11px;">'+reg.protocolo+'</td></tr>';
+          }
+          html += '</tbody></table>';
+          area.innerHTML = html;
+        } else {
+          area.innerHTML = '<div class="loading">Nenhum consumo faturado para este colaborador no período selecionado.</div>';
+        }
+        document.getElementById('blocoBotoes').style.display = 'flex';
+      } else {
+        alert('Erro: ' + r.mensagem);
+        document.getElementById('blocoTabela').style.display = 'none';
+      }
+    }).buscarConsumoIndividual(mat, mes, ano);
   }
-  tbody.innerHTML = html;
-
-  document.getElementById('fichaInd').classList.add('visivel');
-  mostrarMsg('✅ Extrato encontrado: ' + r.totalRegistros + ' registro(s).', 'ok');
-}
-
-// ====== AUXILIARES ======
-function mostrarMsg(t, tipo) {
-  var el = document.getElementById('msg');
-  el.className = 'msg ' + tipo;
-  el.textContent = t;
-}
-function esconderMsg() {
-  var el = document.getElementById('msg');
-  el.className = 'msg';
-  el.textContent = '';
-}
 </script>
-
 </body>
 </html>

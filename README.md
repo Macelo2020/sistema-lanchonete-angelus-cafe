@@ -2,6 +2,8 @@
 
 # 🍔 Sistema de Controle de Consumo - Lanchonete Angelus Café
 
+Versão Geral do Ecossistema: v3.9_Premium
+
 ### Solução completa e blindada com QR Code para controle de consumo de funcionários em lanchonetes hospitalares
 
 [![Google Apps Script](https://img.shields.io/badge/Google%20Apps%20Script-4285F4?style=for-the-badge&logo=google&logoColor=white)](#)
@@ -91,7 +93,7 @@ O sistema é dividido em duas frentes: **Balcão (Atendente)** e **Administrativ
 
 ## 🛡️ Blindagens da Versão Premium
 
-Esta versão (**v3.8 Premium**) foi desenvolvida para ser resiliente a erros humanos na manutenção da planilha banco de dados.
+Esta versão (**v3.9 Premium**) foi desenvolvida para ser resiliente a erros humanos na manutenção da planilha banco de dados.
 
 1.  **Blindagem de Salvamento de Cadastro:** A função de salvamento do servidor (`Code.gs`) foi corrigida para garantir que os dados de autocadastro (setor, e-mail, telefone) sejam gravados nas colunas exatas (`C`, `D`, `E`) da aba `Funcionarios`, prevenindo desalinhamentos no faturamento.
 2.  **WhatsApp Premium:** O link do WhatsApp é gerado no frontend do navegador (`index.html`) usando os dados do faturamento atual. Isso impede faturamentos fantasmas e resolve erros `404` que ocorriam na API do servidor.
