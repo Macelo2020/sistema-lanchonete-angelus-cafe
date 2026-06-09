@@ -259,7 +259,9 @@ Ideias para contribuições futuras:
 
 <div align="center">
 
-### 🐸 Blue Frog Technology
+<img src="docs/ASSETS/image_38.png" width="160px" alt="Blue Frog Smart Solutions Logo"><br>
+
+### 🐸 Blue Frog Smart Solutions
 
 ⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
 
