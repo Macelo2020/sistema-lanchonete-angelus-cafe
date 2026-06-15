@@ -269,7 +269,6 @@ Ideias para contribuições futuras:
   <br/>
   <sub>© 2026 Hospital São Vicente de Paulo. Todos os direitos reservados.</sub>
 </p>
-### 🐸 Blue Frog Smart Solutions
 
 ⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
 
