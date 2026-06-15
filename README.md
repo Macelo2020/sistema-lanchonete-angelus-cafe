@@ -257,9 +257,11 @@ Ideias para contribuições futuras:
 
 ---
 <p align="center">
-### 👨‍💻 Autor:    Marcelo Nascimento dos Santos 
-Senior Systems Analyst & AI Specialist | Founder of BlueFrog Smart Solutions. Building the future with AI-Assisted Dev & No-Code.
-</p>
+  <br/>
+  👨‍💻 Desenvolvedor: Marcelo Nascimento dos Santos 
+  <br/>
+  <sub><b>Senior Systems Analyst & AI Specialist | Founder of BlueFrog Smart Solutions. Building the future with AI-Assisted Dev & No-Code.</sub>
+  </p>
 ---
 
 ---
