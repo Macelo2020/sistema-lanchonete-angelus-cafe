@@ -256,6 +256,8 @@ Ideias para contribuições futuras:
 - [ ] Integração com sistema de folha de pagamento.
 
 ---
+---
+
 <p align="center">
   <br/>
   👨‍💻 Desenvolvedor: Marcelo Nascimento dos Santos 
