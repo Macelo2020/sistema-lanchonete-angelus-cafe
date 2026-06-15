@@ -256,9 +256,10 @@ Ideias para contribuições futuras:
 - [ ] Integração com sistema de folha de pagamento.
 
 ---
-
-### 👨‍💻 Autor:    Marcelo Nascimento dos Santos - Analista de Sistemas e Webmaster
-
+<p align="center">
+### 👨‍💻 Autor:    Marcelo Nascimento dos Santos 
+Senior Systems Analyst & AI Specialist | Founder of BlueFrog Smart Solutions. Building the future with AI-Assisted Dev & No-Code.
+</p>
 ---
 
 ---
