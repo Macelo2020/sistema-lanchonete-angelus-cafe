@@ -263,6 +263,8 @@ Ideias para contribuições futuras:
 
 ---
 
+---
+
 <p align="center">
   <br/>
   <img src="https://github.com/Macelo2020/Macelo2020/raw/main/Logo%20Vertical%20Blue%20Frog.png" alt="BlueFrog Smart Solutions" width="160px"/>
@@ -273,7 +275,3 @@ Ideias para contribuições futuras:
   <br/><br/>
   ⭐ <b>Se este projeto foi útil para você, deixe uma estrela no repositório!</b>
 </p>
-<p align="center">
-  ⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
-</p>
-</div>
