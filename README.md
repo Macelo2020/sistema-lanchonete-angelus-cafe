@@ -270,6 +270,7 @@ Ideias para contribuições futuras:
   <sub>© 2026 Hospital São Vicente de Paulo. Todos os direitos reservados.</sub>
 </p>
 
-⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
-
+<p align="center">
+  ⭐ **Se este projeto foi útil para você, deixe uma estrela no repositório!**
+</p>
 </div>
