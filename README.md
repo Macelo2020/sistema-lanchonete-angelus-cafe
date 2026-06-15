@@ -262,7 +262,6 @@ Ideias para contribuições futuras:
   <br/>
   <sub><b>Senior Systems Analyst & AI Specialist | Founder of BlueFrog Smart Solutions. Building the future with AI-Assisted Dev & No-Code.</sub>
   </p>
----
 
 ---
 
