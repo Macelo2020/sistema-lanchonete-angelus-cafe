@@ -257,7 +257,7 @@ Ideias para contribuições futuras:
 
 ---
 
-## 👨‍💻 Autor
+## 👨‍💻 Autor:    Marcelo Nascimento dos Santos - Analista de Sistemas e Webmaster
 
 ---
 
